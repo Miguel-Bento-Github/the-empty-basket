@@ -1,112 +1,45 @@
 <template>
   <div class="table">
     <div class="table-header">
-      <h1>chain</h1>
-      <h1>name</h1>
-      <h1>price</h1>
-      <h1>unit</h1>
+      <h1 class="title" v-for="title in titles" :key="title.id">
+        <span
+          class="letter"
+          :style="{ color: colors[i] }"
+          v-for="(letter, i) in title"
+          :key="letter.id"
+          >{{ letter }}</span
+        >
+      </h1>
     </div>
-
-    <div class="table-body" v-for="item in items" :key="item._id">
-      <input
-        name="chain"
-        @input="updateData"
-        :readonly="isReadOnly"
-        :class="!isReadOnly && 'input'"
-        :placeholder="item.chain"
-      />
-      <input
-        name="name"
-        @input="updateData"
-        :readonly="isReadOnly"
-        :class="!isReadOnly && 'input'"
-        :placeholder="item.name"
-      />
-      <input
-        name="price"
-        @input="updateData"
-        :readonly="isReadOnly"
-        :class="!isReadOnly && 'input'"
-        :placeholder="item.price"
-      />
-      <input
-        name="unit"
-        @input="updateData"
-        :readonly="isReadOnly"
-        :class="!isReadOnly && 'input'"
-        :placeholder="item.unit"
-      />
-      <grocery-input />
-
-      <div class="control">
-        <button @click="toggleEdit" type="edit" class="edit">
-          edit
-        </button>
-
-        <button
-          v-if="isReadOnly"
-          @click="deleteItem(item._id)"
-          type="button"
-          class="delete"
-        >
-          delete
-        </button>
-        <button
-          v-else
-          @click="updateItem(item._id)"
-          type="button"
-          class="submit"
-        >
-          submit
-        </button>
+    <div class="table-body" v-for="product in products" :key="product._id">
+      <div class="table-item" name="chain">
+        {{ product.product_category }}
+      </div>
+      <div class="table-item" name="name">
+        {{ product.product_name }}
+      </div>
+      <div class="table-item" name="price">
+        {{ product.price }}
+      </div>
+      <div class="table-item" name="unit">
+        {{ product.unit }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import GroceryInput from './GroceryInput';
-
   export default {
     name: 'GroceryItem',
-    components: {
-      GroceryInput,
-    },
-    props: ['items'],
+    props: ['products', 'colors'],
     data() {
       return {
         name: '',
-        price: '',
+        price: 0,
         unit: '',
         chain: '',
-        isReadOnly: true,
+        titles: ['category', 'name', 'price', 'unit'],
       };
-    },
-    methods: {
-      updateData({ target }) {
-        this[target.name] = target.value;
-      },
-      toggleEdit() {
-        console.log(this.items[0]);
-
-        this.isReadOnly = !this.isReadOnly;
-      },
-      updateItem(id) {
-        const data = {
-          name: this.name || null,
-          price: this.price || null,
-          unit: this.unit || null,
-          chain: this.chain || null,
-        };
-        const payload = {
-          id,
-          data,
-        };
-        this.$emit('update-item', payload);
-      },
-      deleteItem(id) {
-        this.$emit('delete-item', id);
-      },
     },
   };
 </script>
@@ -118,61 +51,32 @@
     &-header,
     &-body {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       justify-content: space-between;
       text-transform: capitalize;
+      cursor: default;
+    }
+
+    &-body {
+      transition: color 1500ms linear, background 1500ms linear;
+
+      &:nth-child(even) {
+        background: rgba(#1a2530, 0.2);
+      }
+
+      &:hover {
+        color: #1a2530;
+        background: rgba(#f4f4f4, 0.6);
+      }
+    }
+
+    &-item {
+      padding: 5px;
     }
 
     .control {
       display: flex;
       align-items: center;
-
-      .edit,
-      .delete,
-      .submit {
-        width: max-content;
-        padding: 2px 6px;
-        margin: 3px;
-        border-radius: 5px;
-        transition: box-shadow 1s ease-out;
-
-        &:active {
-          position: relative;
-          top: 1px;
-          left: 1px;
-        }
-      }
-
-      .edit {
-        box-shadow: -1px -1px 3px #54e9c9, 1px 1px 3px #54e9c9;
-
-        &:hover {
-          box-shadow: -1px -1px 3px #3a4b47, 1px 1px 3px #3a4b47;
-        }
-      }
-
-      .submit {
-        box-shadow: -1px -1px 3px #54b2e9, 1px 1px 3px #54b2e9;
-
-        &:hover {
-          box-shadow: -1px -1px 3px #8ecaec, 1px 1px 3px #8ecaec;
-        }
-      }
-
-      .delete {
-        color: #e95454;
-        cursor: default;
-
-        box-shadow: -1px -1px 3px #e95454, 1px 1px 3px #e95454;
-
-        &:hover {
-          box-shadow: -1px -1px 3px #ac3838, 1px 1px 3px #ac3838;
-        }
-
-        &:active {
-          box-shadow: -1px -1px 3px #d62929, 1px 1px 3px #dd2828;
-        }
-      }
     }
   }
 </style>

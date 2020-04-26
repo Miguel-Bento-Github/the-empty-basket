@@ -14,33 +14,38 @@
       </div>
 
       <div class="new-item-row">
-        <input required class="input" v-model="name" type="text" id="name" />
-        <label class="label" for="name">{{ name || 'name' }}</label>
+        <input
+          id="name"
+          class="input"
+          type="text"
+          placeholder="name"
+          v-model="name"
+          required
+        />
+        <label class="label" for="name">{{ name }}</label>
       </div>
 
       <div class="new-item-row ">
         <input
-          required
-          class="input"
-          v-model="price"
-          type="number"
           id="price"
+          class="input"
+          type="number"
           step="0.01"
+          placeholder="price"
+          v-model.number="price"
+          required
         />
-        <label class="label" for="price">{{
-          (price && '€' + price) || 'price'
-        }}</label>
+        <label class="label" for="price">{{ '€' + price }}</label>
       </div>
 
       <div class="new-item-row radio">
         <input required v-model="unit" type="radio" value="Piece" id="piece" />
         <label :class="unit === 'Piece' && 'success'" class="label" for="piece"
-          >Each</label
+          >stuk</label
         >
-
         <input required v-model="unit" type="radio" value="Kg" id="kilo" />
         <label :class="unit === 'Kg' && 'success'" class="label" for="kilo"
-          >Kg</label
+          >kg</label
         >
       </div>
 
@@ -121,7 +126,6 @@
       color: #f4f4f4;
       padding: 2px 12px;
       cursor: pointer;
-      font-size: 18px;
       text-transform: uppercase;
       max-width: max-content;
 
@@ -141,7 +145,7 @@
     grid-template-areas:
       '. chain .'
       'name price unit';
-    border: 1px solid #2c3e50;
+    border: 1px solid #f4f4f4;
     justify-content: space-between;
     align-items: flex-start;
     border-radius: 5px;
