@@ -7,15 +7,13 @@
           Style bind starts by finding all letters
           that are a multiple of a random number between 1 and 2.
           Then applies a drop shadow from a random array of colors
-         -->
+          -->
           <span
             class="letter"
             :class="isTyping && 'letter-active'"
             :style="
-              i % Math.floor(Math.random() * 2) === 0 && {
-                filter: `drop-shadow(0 0 ${Math.floor(Math.random() * 8)}px ${
-                  colors[i]
-                })`
+              i % getRandomIntFrom(2) === 0 && {
+                filter: `drop-shadow(0 0 ${getRandomIntFrom(8)}px ${colors[i]})`
               }
             "
             v-for="(letter, i) in title"
@@ -43,9 +41,8 @@
           <span
             class="table-item-details"
             v-if="showDetails.active && showDetails.index === index"
+            >{{ product.category }}</span
           >
-            {{ product.category }}
-          </span>
           <span v-else>{{ product.category }}</span>
         </div>
 
@@ -58,23 +55,19 @@
           <span
             class="table-item-details"
             v-if="showDetails.active && showDetails.index === index"
+            >{{ product.name }}</span
           >
-            {{ product.name }}
-          </span>
           <span v-else>{{ product.name }}</span>
         </div>
-        <div class="table-item" name="price">
-          {{ product.price }}
-        </div>
-        <div class="table-item" name="unit">
-          {{ product.unit }}
-        </div>
+        <div class="table-item" name="price">{{ product.price }}</div>
+        <div class="table-item" name="unit">{{ product.unit }}</div>
       </div>
     </transition-group>
   </div>
 </template>
 
 <script>
+import getRandomIntFrom from "../utils/getRandomInt";
 export default {
   name: "GroceryItem",
   props: ["products", "colors", "isTyping", "loading", "showHeader", "theme"],
@@ -125,27 +118,27 @@ export default {
   }
 
   &-body {
-    transition: color 150ms linear, background 150ms linear;
+    transition: color 150ms linear, background-color 150ms linear;
 
     &.dark {
       &:nth-child(even) {
-        background: rgba(#f4f4f4, 0.2);
+        background-color: rgba(#f4f4f4, 0.2);
       }
 
       &:hover {
         color: #1a2530;
-        background: rgba(#f4f4f4, 0.6);
+        background-color: rgba(#f4f4f4, 0.6);
       }
     }
 
     &.light {
       &:nth-child(odd) {
-        background: rgba(#1a2530, 0.2);
+        background-color: rgba(#1a2530, 0.2);
       }
 
       &:hover {
         color: #f4f4f4;
-        background: rgba(#1a2530, 0.6);
+        background-color: rgba(#1a2530, 0.6);
       }
     }
   }
@@ -164,7 +157,6 @@ export default {
         width: max-content;
         position: absolute;
         background: #1a2530;
-        color: #f4f4f4;
         padding: 0 8px;
       }
     }
