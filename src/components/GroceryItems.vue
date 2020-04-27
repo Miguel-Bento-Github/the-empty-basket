@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import getRandomIntFrom from "../utils/getRandomInt";
+import getRandomIntFrom from "../utils/getRandomIntFrom";
 export default {
   name: "GroceryItem",
   props: ["products", "colors", "isTyping", "loading", "showHeader", "theme"],
