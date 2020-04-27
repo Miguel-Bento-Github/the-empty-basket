@@ -1,13 +1,13 @@
 # The Empty Basket
 
-<div
-  style='font-family: Avenir, Roboto, Arial; cursor: pointer;'
-  href="https://the-empty-basket.netlify.app/"
->
-  <a style='color: #f4f4f4; text-decoration: none;'>Live Version
+<a
+style='color: #f4f4f4; text-decoration: none; font-family: Avenir, Roboto, Arial; cursor: pointer;'
+href="https://the-empty-basket.netlify.app/">
+
+  <div>Live Version
   <span style='font-size: 24px; top: 3px; position: relative;' >&#8227;</span>
-  </a>
-</div>
+  </div>
+</a>
 <pre>
 
                                                                                                  ▄▄▄▄
