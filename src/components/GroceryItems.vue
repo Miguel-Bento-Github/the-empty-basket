@@ -85,9 +85,12 @@ export default {
     };
   },
   methods: {
+    getRandomIntFrom,
+
     detectMob() {
       return window.innerWidth <= 450 && window.innerWidth <= 600;
     },
+
     openDetails(index) {
       this.showDetails.active = Boolean(index);
       this.showDetails.index = index;
