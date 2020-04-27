@@ -157,12 +157,15 @@
     .chain {
       grid-area: chain;
     }
+
     .name {
       grid-area: name;
     }
+
     .price {
       grid-area: price;
     }
+
     .unit {
       grid-area: unit;
     }

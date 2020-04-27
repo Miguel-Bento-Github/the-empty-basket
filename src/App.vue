@@ -1,18 +1,28 @@
 <template>
-  <div id="app">
+  <div id="app" class="app" :class="theme">
     <!-- <create-new-item @create-item="createItem" /> -->
     <filter-items
+      @change-theme="changeTheme"
+      @show-header="setHeaderDisplay"
       @change-color="changeColor"
       @filter="findProducts"
+      @not-typing="isTyping = false"
       :loading="loading"
+      :theme="theme"
     />
-    <grocery-items :colors="colors" :products="products" />
+    <grocery-items
+      :theme="theme"
+      :loading="loading"
+      :showHeader="showHeader"
+      :isTyping="isTyping"
+      :colors="colors"
+      :products="products"
+    />
   </div>
 </template>
 
 <script>
   import Axios from 'axios';
-
   import FilterItems from './components/FilterItems';
   import GroceryItems from './components/GroceryItems';
 
@@ -25,29 +35,45 @@
     data() {
       return {
         products: [],
-        loading: false,
+        loading: true,
+        isTyping: false,
+        filter: null,
+        showHeader: false,
         colors: [
           '#F9F871',
           '#93DC80',
           '#38B892',
           '#D5F4FF',
           '#FFECCB',
-          '#FFECCB',
           '#00C6B5',
         ],
+        theme: {
+          light: true,
+          dark: false,
+        },
       };
     },
     methods: {
+      changeTheme() {
+        this.theme.light = !this.theme.light;
+        this.theme.dark = !this.theme.dark;
+      },
+      setHeaderDisplay(isVisible) {
+        this.showHeader = isVisible;
+      },
       changeColor() {
+        this.isTyping = true;
         const colors = this.colors;
         for (let i = colors.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [colors[i], colors[j]] = [colors[j], colors[i]];
         }
+        return colors;
       },
       async findProducts(payload) {
+        this.filter = payload;
         this.loading = true;
-        const url = 'http://localhost:8008/api/items';
+        const url = `${process.env.VUE_APP_API}/api/items`;
         if (payload) {
           let res;
           if (typeof payload === 'number') {
@@ -56,7 +82,6 @@
             } else {
               res = await Axios.post(url, { price: payload });
             }
-
             this.products = res.data;
           } else {
             res = await Axios.post(url, { query: payload });
@@ -69,9 +94,6 @@
           this.loading = false;
         }
       },
-    },
-    beforeMount() {
-      this.findProducts();
     },
   };
 </script>
@@ -88,17 +110,31 @@
   #app {
     min-height: 100vh;
     font-family: 'Inconsolata', monospace;
-    font-size: calc(14px + (26 - 14) * ((100vw - 300px) / (1600 - 300)));
+    font-size: calc(13px + (26 - 13) * ((100vw - 300px) / (1600 - 300)));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #f4f4f4;
-    background: #2c3e50;
-    padding: 2vh 4vw;
+    padding: 2vh 2vw;
+    line-height: 1.3;
+
+    @media screen and (max-width: 450px) {
+      min-height: 85vh;
+    }
+
+    &.dark {
+      color: #f4f4f4;
+      background: #2c3e50;
+    }
+
+    &.light {
+      color: #2c3e50;
+      background: #f4f4f4;
+    }
   }
 
   h1 {
-    font-size: calc(24px + (48 - 24) * ((100vw - 300px) / (1600 - 300)));
+    font-size: calc(20px + (48 - 23) * ((100vw - 300px) / (1600 - 300)));
   }
+
   h2 {
     font-size: calc(18px + (48 - 18) * ((100vw - 300px) / (1600 - 300)));
   }
@@ -116,6 +152,7 @@
   button,
   input {
     font-family: 'Inconsolata', monospace;
+    font-size: calc(18px + (28 - 18) * ((100vw - 300px) / (1600 - 300)));
   }
 
   input {
@@ -123,31 +160,7 @@
     cursor: default;
     width: min-content;
     background: transparent;
-    color: #f4f4f4;
+    color: inherit;
     outline: thin;
-    font-size: 18px;
-  }
-
-  .input {
-    border: 0;
-    border-bottom: 1px solid #f4f4f4;
-    border-radius: 2px;
-    outline: thin;
-    padding: 8px 16px;
-    transition: border 1s ease-out, background 1s linear;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-
-    &:hover {
-      background: rgba(#000, 0.1);
-    }
-
-    &:focus {
-      border-bottom: 1px solid #c4c466;
-    }
-
-    &:active {
-      border-bottom: 1px solid #c4c466;
-    }
   }
 </style>
