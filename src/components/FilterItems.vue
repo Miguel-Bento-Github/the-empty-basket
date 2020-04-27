@@ -14,14 +14,14 @@
     <div class="tooltip" :class="theme" v-if="showTooltip">
       <p>
         Use
-        <span class="example">integers</span>
+        <span class="example" :class="theme">integers</span>
         for page amount,<br />
-        <span class="example">
+        <span class="example" :class="theme">
           decimals
         </span>
         for max price and
         <br />
-        <span class="example">letters</span>
+        <span class="example" :class="theme">letters</span>
         for product search.
       </p>
     </div>
@@ -155,7 +155,13 @@
     }
 
     .example {
-      color: #38b892;
+      &.light {
+        color: #24755d;
+      }
+
+      &.dark {
+        color: #38b892;
+      }
     }
   }
 
