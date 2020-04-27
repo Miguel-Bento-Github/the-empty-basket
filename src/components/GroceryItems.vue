@@ -160,6 +160,7 @@ export default {
         width: max-content;
         position: absolute;
         background: #1a2530;
+        color: #f4f4f4;
         padding: 0 8px;
       }
     }
