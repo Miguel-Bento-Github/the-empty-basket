@@ -39,19 +39,33 @@ export default {
       isTyping: false,
       filter: null,
       showHeader: false,
-      colors: [
+      theme: {
+        light: true,
+        dark: false
+      }
+    };
+  },
+  computed: {
+    colors() {
+      const dark = [
         "#F9F871",
         "#93DC80",
         "#38B892",
         "#D5F4FF",
         "#FFECCB",
         "#00C6B5"
-      ],
-      theme: {
-        light: true,
-        dark: false
-      }
-    };
+      ];
+      const light = [
+        "#ECA72C",
+        "#EE5622",
+        "#202C59",
+        "#A1B5D8",
+        "#856A5D",
+        "#E0ACD5"
+      ];
+
+      return this.theme.light ? light : dark;
+    }
   },
   methods: {
     changeTheme() {
