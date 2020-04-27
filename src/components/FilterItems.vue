@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent class="control">
-    <div class="input">
+    <label class="input">
       <input
         placeholder="input search here..."
         @input.prevent="submit"
@@ -9,9 +9,9 @@
         type="text"
         v-model="filter"
       />
-    </div>
+    </label>
 
-    <div class="tooltip" :class="theme" v-show="showTooltip">
+    <div class="tooltip" :class="theme" v-if="showTooltip">
       <p>
         Use
         <span class="example">integers</span>
@@ -24,6 +24,10 @@
         <span class="example">letters</span>
         for product search.
       </p>
+    </div>
+
+    <div class="tooltip" v-else-if="loading">
+      Loading data, please wait...
     </div>
 
     <div
@@ -47,7 +51,7 @@
   import Odd from './Odd';
   export default {
     name: 'filter-items',
-    props: ['theme'],
+    props: ['theme', 'loading'],
     data() {
       return {
         filter: null,
