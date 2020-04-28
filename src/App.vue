@@ -6,7 +6,6 @@
       @show-header="setHeaderDisplay"
       @change-color="changeColor"
       @filter="findProducts"
-      @not-typing="isTyping = false"
       :loading="loading"
       :theme="theme"
     />
@@ -25,8 +24,8 @@
 
 <script>
   import Axios from 'axios';
-  import FilterItems from './components/FilterItems';
-  import GroceryItems from './components/GroceryItems';
+  import FilterItems from './components/container/FilterItems';
+  import GroceryItems from './components/container/GroceryItems';
 
   export default {
     name: 'App',
