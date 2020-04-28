@@ -10,14 +10,16 @@
       :loading="loading"
       :theme="theme"
     />
-    <grocery-items
-      :theme="theme"
-      :loading="loading"
-      :showHeader="showHeader"
-      :isTyping="isTyping"
-      :colors="colors"
-      :products="products"
-    />
+    <main class="main">
+      <grocery-items
+        :theme="theme"
+        :loading="loading"
+        :showHeader="showHeader"
+        :isTyping="isTyping"
+        :colors="colors"
+        :products="products"
+      />
+    </main>
   </div>
 </template>
 
