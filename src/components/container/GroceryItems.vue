@@ -63,16 +63,16 @@
 </template>
 
 <script>
-  import getRandomIntFrom from '../utils/getRandomIntFrom';
+  import getRandomIntFrom from '../../utils/getRandomIntFrom';
   export default {
     name: 'GroceryItem',
     props: ['products', 'colors', 'isTyping', 'loading', 'showHeader', 'theme'],
     data() {
       return {
         name: '',
-        price: 0,
         unit: '',
         category: '',
+        price: 0,
         headers: ['cat.', 'name', 'price', 'unit'],
         showDetails: {
           active: false,

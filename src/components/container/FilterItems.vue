@@ -48,7 +48,7 @@
 </template>
 
 <script>
-  import Odd from './Odd';
+  import Odd from '../Odd';
   export default {
     name: 'filter-items',
     props: ['theme', 'loading'],
@@ -57,6 +57,7 @@
         filter: null,
         showOdd: false,
         showTooltip: false,
+        showHeader: false,
       };
     },
     components: {
@@ -67,7 +68,10 @@
         this.$emit('change-theme');
       },
       submit() {
-        this.$emit('show-header', true);
+        if (!this.showHeader) {
+          this.showHeader = true;
+          this.$emit('show-header', this.showHeader);
+        }
         this.$emit('change-color');
         if (isNaN(+this.filter)) {
           this.$emit('filter', this.filter);
