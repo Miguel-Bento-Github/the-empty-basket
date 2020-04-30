@@ -72,7 +72,8 @@
 </template>
 
 <script>
-  import getRandomIntFrom from '../../utils/getRandomIntFrom';
+  import getRandomIntFrom from '../../utils/get-random-int';
+
   export default {
     name: 'grocery-items',
     props: ['products', 'colors', 'isTyping', 'loading', 'showHeader', 'theme'],
@@ -100,21 +101,25 @@
           }
         );
       },
-      detectMob() {
+      detectMobile() {
         return window.innerWidth <= 450 && window.innerWidth <= 600;
       },
       openDetails(index) {
-        this.showDetails.active = Boolean(index);
+        this.showDetails.active = true;
         this.showDetails.index = index;
       },
       addToCart(product) {
-        this.$emit('add-to-cart', product);
+        // using set will make the property reactive.
+        if (!product.quantity) {
+          this.$set(product, ['quantity'], 1);
+        }
+        this.$store.dispatch('add', product);
       },
     },
     computed: {
       titles() {
         const headers = [...this.headers];
-        if (!this.detectMob()) {
+        if (!this.detectMobile()) {
           headers[0] = 'category';
         }
         return headers;
@@ -125,6 +130,8 @@
 
 <style lang="scss" scoped>
   .table {
+    margin-top: 5vh;
+
     &-header,
     &-body {
       display: grid;
