@@ -1,7 +1,7 @@
 <template>
   <transition name="slide-fade">
     <div
-      v-if="showBasket"
+      v-if="basket.length > 0"
       @click="handleVisibility"
       :class="{ hide: hide }"
       class="basket"
@@ -24,78 +24,57 @@
 </template>
 
 <script>
-import BasketProduct from "../BasketProduct";
+  import store from '../../store/index';
+  import BasketProduct from '../BasketProduct';
 
-export default {
-  name: "basket",
-  components: {
-    BasketProduct
-  },
-  props: {
-    basket: {
-      required: true,
-      type: Array
+  export default {
+    store,
+    name: 'basket',
+    components: {
+      BasketProduct,
     },
-    showBasket: {
-      required: true,
-      type: Boolean
-    }
-  },
-  data() {
-    return {
-      hide: false
-    };
-  },
-  methods: {
-    handleVisibility({ target }) {
-      console.log(target);
-
-      this.hide = !this.hide;
-    }
-  },
-  computed: {
-    totalPrice() {
-      let result = 0;
-      this.basket.map(({ price }) => {
-        result += +price;
-      });
-      return result.toFixed(2);
+    data() {
+      return {
+        hide: false,
+      };
     },
-    totalWeight() {
-      let result = 0;
-      this.basket.map(({ unit }) => {
-        if (unit.slice(-2) === "kg") {
-          const quantity = Number(unit.replace(/[^0-9.]+/g, ""));
-          result += quantity;
-        } else if (unit.slice(-2) === " g") {
-          let quantity = Number(unit.replace(/[^0-9]+/g, "")) / 1000;
-          result += quantity;
-        }
-      });
-      return result + " Kg";
-    }
-  }
-};
+    methods: {
+      handleVisibility() {
+        this.hide = !this.hide;
+      },
+    },
+    computed: {
+      basket() {
+        return store.state.basket;
+      },
+      totalPrice() {
+        return store.getters.totalPrice;
+      },
+      totalWeight() {
+        return store.getters.totalWeight;
+      },
+    },
+  };
 </script>
 
-<style lang='scss' scoped>
-.basket {
-  background: #2c3e50;
-  color: #f4f4f4;
-  max-width: max-content;
-  padding: 5px 10px;
-  border-radius: 2px;
-  transform: translateX(0);
-  transition: all 250ms ease;
-}
+<style lang="scss" scoped>
+  .basket {
+    background: #2c3e50;
+    color: #f4f4f4;
+    max-width: max-content;
+    padding: 5px 10px;
+    border-radius: 2px;
+    transform: translateX(0);
+    transition: all 250ms ease;
+  }
 
-.footer {
-  margin-top: 15px;
-}
+  .footer {
+    margin-top: 15px;
+  }
 
-.hide {
-  transform: translateX(-100%);
-  opacity: 0.5;
-  color: #2c3e50;
-}
+  .hide {
+    transform: translateX(-100%);
+    opacity: 0.5;
+    color: #2c3e50;
+  }
 </style>
