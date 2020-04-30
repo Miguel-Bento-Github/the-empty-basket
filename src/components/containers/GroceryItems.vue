@@ -27,6 +27,7 @@
         v-for="(product, index) in products"
         :key="product._id"
         :data-index="index"
+        @mouseenter="showAddToCart = true"
       >
         <div
           class="table-item"
@@ -56,7 +57,15 @@
           <span v-else>{{ product.name }}</span>
         </div>
         <div class="table-item" name="price">{{ product.price }}</div>
-        <div class="table-item" name="unit">{{ product.unit }}</div>
+        <div class="table-item row-end" name="unit">
+          {{ product.unit }}
+          <span
+            class="add-to-cart"
+            @click="addToCart(product)"
+            v-if="showAddToCart"
+            >add</span
+          >
+        </div>
       </div>
     </transition-group>
   </section>
@@ -65,7 +74,7 @@
 <script>
   import getRandomIntFrom from '../../utils/getRandomIntFrom';
   export default {
-    name: 'GroceryItem',
+    name: 'grocery-items',
     props: ['products', 'colors', 'isTyping', 'loading', 'showHeader', 'theme'],
     data() {
       return {
@@ -73,6 +82,7 @@
         unit: '',
         category: '',
         price: 0,
+        showAddToCart: false,
         headers: ['cat.', 'name', 'price', 'unit'],
         showDetails: {
           active: false,
@@ -93,10 +103,12 @@
       detectMob() {
         return window.innerWidth <= 450 && window.innerWidth <= 600;
       },
-
       openDetails(index) {
         this.showDetails.active = Boolean(index);
         this.showDetails.index = index;
+      },
+      addToCart(product) {
+        this.$emit('add-to-cart', product);
       },
     },
     computed: {
@@ -113,8 +125,6 @@
 
 <style lang="scss" scoped>
   .table {
-    margin-top: 5vh;
-
     &-header,
     &-body {
       display: grid;
@@ -192,6 +202,19 @@
     &-leave-to {
       transform: translateY(-10px);
       opacity: 0;
+    }
+  }
+
+  .row-end {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .add-to-cart {
+    cursor: pointer;
+
+    &:hover {
+      font-weight: 700;
     }
   }
 </style>
