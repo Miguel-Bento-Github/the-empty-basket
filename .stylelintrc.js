@@ -1,4 +1,4 @@
 module.exports = {
-  root: true,
-  'extends': 'stylelint-config-standard'
-}
+  processors: ['stylelint-processor-html'],
+  extends: 'stylelint-config-standard',
+};

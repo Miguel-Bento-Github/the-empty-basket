@@ -23,134 +23,141 @@
 </template>
 
 <script>
-import FilterItems from "./components/containers/FilterItems";
-import Products from "./components/containers/Products";
-import Basket from "./components/containers/Basket";
-import findProducts from "./utils/find-products";
-import theme from "./utils/theme";
+  import FilterItems from './components/containers/FilterItems';
+  import Products from './components/containers/Products';
+  import Basket from './components/containers/Basket';
+  import findProducts from './utils/find-products';
+  import theme from './utils/theme';
+  import { SET_BACKGROUND, FILL_BASKET } from './store/mutation-types';
 
-export default {
-  name: "App",
-  components: {
-    Products,
-    FilterItems,
-    Basket
-  },
-  data() {
-    return {
-      products: [],
-      loading: false,
-      isTyping: false,
-      filter: null,
-      showHeader: false,
-      theme: {
-        light: true,
-        dark: false
+  export default {
+    name: 'App',
+    components: {
+      Products,
+      FilterItems,
+      Basket,
+    },
+    data() {
+      return {
+        products: [],
+        loading: false,
+        isTyping: false,
+        filter: null,
+        showHeader: false,
+        theme: {
+          light: true,
+          dark: false,
+        },
+      };
+    },
+    computed: {
+      colors() {
+        return this.theme.light ? theme.light : theme.dark;
+      },
+    },
+    methods: {
+      changeTheme() {
+        this.theme.light = !this.theme.light;
+        this.theme.dark = !this.theme.dark;
+      },
+      setHeaderDisplay(isVisible) {
+        this.showHeader = isVisible;
+      },
+      changeColor() {
+        this.isTyping = true;
+        const colors = this.colors;
+        for (let i = colors.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [colors[i], colors[j]] = [colors[j], colors[i]];
+        }
+        return colors;
+      },
+      findProducts,
+    },
+    created() {
+      this.$store.dispatch(SET_BACKGROUND, this.theme);
+    },
+    mounted() {
+      const basket = localStorage.getItem('basket');
+      if (basket) {
+        try {
+          this.$store.dispatch(FILL_BASKET, JSON.parse(basket));
+        } catch {
+          localStorage.removeItem('basket');
+        }
       }
-    };
-  },
-  computed: {
-    colors() {
-      return this.theme.light ? theme.light : theme.dark;
-    }
-  },
-  methods: {
-    changeTheme() {
-      this.theme.light = !this.theme.light;
-      this.theme.dark = !this.theme.dark;
     },
-    setHeaderDisplay(isVisible) {
-      this.showHeader = isVisible;
-    },
-    changeColor() {
-      this.isTyping = true;
-      const colors = this.colors;
-      for (let i = colors.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [colors[i], colors[j]] = [colors[j], colors[i]];
-      }
-      return colors;
-    },
-    findProducts
-  }
-};
+  };
 </script>
 
 <style lang="scss">
-@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap");
+  @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300&display=swap');
+  @import './colors.scss';
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-#app {
-  min-height: 100vh;
-  font-family: "Inconsolata", monospace;
-  font-size: calc(13px + (26 - 13) * ((100vw - 300px) / (1600 - 300)));
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  padding: 2vh 2vw;
-  line-height: 1.3;
-
-  @media screen and (max-width: 450px) {
-    min-height: 85vh;
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
 
-  &.dark {
-    color: #f4f4f4;
-    background: #2c3e50;
+  #app {
+    font-family: 'Inconsolata', monospace;
+    font-size: calc(13px + (26 - 13) * ((100vw - 300px) / (1600 - 300)));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 2vh 4vw;
+    line-height: 1.3;
+    min-height: 100vh;
+
+    @media screen and (max-width: 450px) {
+      min-height: 85vh;
+    }
+
+    &.dark {
+      color: $light;
+      background: $dark;
+    }
+
+    &.light {
+      color: $dark;
+      background: $light;
+    }
   }
 
-  &.light {
-    color: #2c3e50;
-    background: #f4f4f4;
-  }
-}
-
-.theme {
-  &-dark {
-    color: #f4f4f4;
-    background: #2c3e50;
+  .icon {
+    max-height: 64px;
   }
 
-  &-light {
-    color: #2c3e50;
-    background: #f4f4f4;
+  h1 {
+    font-size: calc(20px + (48 - 23) * ((100vw - 300px) / (1600 - 300)));
   }
-}
 
-h1 {
-  font-size: calc(20px + (48 - 23) * ((100vw - 300px) / (1600 - 300)));
-}
+  h2 {
+    font-size: calc(16px + (30 - 16) * ((100vw - 300px) / (1600 - 300)));
+  }
 
-h2 {
-  font-size: calc(16px + (30 - 16) * ((100vw - 300px) / (1600 - 300)));
-}
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
+  button,
+  p {
+    all: unset;
+  }
 
-button,
-p {
-  all: unset;
-}
+  button,
+  input {
+    font-family: 'Inconsolata', monospace;
+    font-size: calc(18px + (28 - 18) * ((100vw - 300px) / (1600 - 300)));
+  }
 
-button,
-input {
-  font-family: "Inconsolata", monospace;
-  font-size: calc(18px + (28 - 18) * ((100vw - 300px) / (1600 - 300)));
-}
-
-input {
-  border: 0;
-  cursor: default;
-  width: min-content;
-  background: transparent;
-  color: inherit;
-  outline: thin;
-}
+  input {
+    border: 0;
+    cursor: default;
+    width: min-content;
+    background: transparent;
+    color: inherit;
+    outline: thin;
+  }
 </style>
