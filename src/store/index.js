@@ -25,20 +25,38 @@ export default new Vuex.Store({
     },
     totalWeight(state) {
       let result = 0;
-      state.basket.map(({ unit, quantity }) => {
-        if (unit.slice(-2) === 'kg') {
-          const quantity = Number(unit.replace(/[^0-9.]+/g, ''));
-          result += quantity;
-        } else if (unit.slice(-2) === ' g') {
-          let quantity = Number(unit.replace(/[^0-9]+/g, '')) / 1000;
-          result += quantity;
+      const unitType = (who, from, to) =>
+        who
+          .toLowerCase()
+          .slice(from, to)
+          .split(' ')
+          .join('');
+
+      state.basket.map((product) => {
+        const weight = (item) => Number(item.replace(/[^0-9.]+/g, ''));
+        if (
+          unitType(product.unit, -2) === 'g' ||
+          unitType(product.unit, -2) === 'ml'
+        ) {
+          if (unitType(product.unit, 2, 4) === 'x') {
+            const units = product.unit.split('x');
+            const factor = units[0];
+            const grams = weight(units[1]);
+
+            result += ((factor * grams) / 1000) * product.quantity;
+            return;
+          } else {
+            result += (weight(product.unit) * product.quantity) / 1000;
+          }
+        } else if (
+          unitType(product.unit, -2) === 'kg' ||
+          unitType(product.unit, -2) === 'l'
+        ) {
+          result += weight(product.unit) * product.quantity;
         }
-        result = result * quantity;
       });
 
-      Number.isInteger(result) ? result.toFixed(0) : result.toFixed(0);
-
-      return result + ' Kg';
+      return Math.round(result * 10) / 10 + ' Kg';
     },
   },
   mutations: {
