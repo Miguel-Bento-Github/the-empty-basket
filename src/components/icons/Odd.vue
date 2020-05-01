@@ -28,8 +28,8 @@
 </template>
 
 <script>
-  export default {
-    name: 'Icon',
-    props: ['showHead'],
-  };
+export default {
+  name: "Odd",
+  props: ["showHead"]
+};
 </script>

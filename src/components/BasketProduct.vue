@@ -1,7 +1,7 @@
 <template>
   <div>
     <span>{{ name }}</span>
-    <span> / quantity: {{ quantity }}</span>
+    <span> x{{ quantity }}</span>
   </div>
 </template>
 
