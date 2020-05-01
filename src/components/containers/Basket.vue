@@ -2,126 +2,125 @@
   <transition name="fade">
     <div
       v-if="basket.length > 0"
-      @click="handleVisibility"
-      :class="{ hide: hide }"
+      :class="[{ hide: hide }, theme]"
       class="basket"
     >
+      <header class="header">
+        <h1 class="title">Basket</h1>
+      </header>
       <div class="content">
-        <header class="header">
-          <h1 class="title">Basket</h1>
-        </header>
         <basket-product
+          :theme="theme"
           v-for="product in basket"
-          :name="product.name"
-          :quantity="product.quantity"
+          :product="product"
           :key="product._id"
         />
-        <footer class="footer">
-          <h2>Total: €{{ totalPrice }}</h2>
-          <h2>Estimated weight: {{ totalWeight }}</h2>
-        </footer>
       </div>
-      <bag
-        :class="
-          ({
-            ['bag-hide']: !hide
-          },
-          theme)
-        "
-        class="bag"
-      />
+      <footer class="footer">
+        <div>Total: €{{ totalPrice }}</div>
+        <div>Estimated weight: {{ totalWeight }}</div>
+      </footer>
     </div>
   </transition>
 </template>
 
 <script>
-import store from "../../store/index";
-import BasketProduct from "../BasketProduct";
-import Bag from "../icons/Bag";
+  import store from '../../store/index';
+  import BasketProduct from '../BasketProduct';
 
-export default {
-  store,
-  name: "basket",
-  props: ["theme"],
-  components: {
-    BasketProduct,
-    Bag
-  },
-  data() {
-    return {
-      hide: false
-    };
-  },
-  methods: {
-    handleVisibility() {
-      this.hide = !this.hide;
-    }
-  },
-  computed: {
-    basket() {
-      return store.state.basket;
+  export default {
+    store,
+    name: 'basket',
+    props: {
+      theme: {
+        type: Object,
+        required: true,
+      },
     },
-    totalPrice() {
-      return store.getters.totalPrice;
+    components: {
+      BasketProduct,
     },
-    totalWeight() {
-      return store.getters.totalWeight;
-    }
-  }
-};
+    computed: {
+      hide() {
+        return store.state.hideBasket;
+      },
+      basket() {
+        return store.state.basket;
+      },
+      totalPrice() {
+        return store.getters.totalPrice;
+      },
+      totalWeight() {
+        return store.getters.totalWeight;
+      },
+    },
+  };
 </script>
 
 <style lang="scss" scoped>
-.basket {
-  cursor: default;
-  position: fixed;
-  bottom: 0;
-  max-width: max-content;
-  padding: 5px 10px;
-  border-radius: 2px;
-  transform: translateX(0);
-  transition: all 250ms ease;
-  display: flex;
-}
+  @import '../../colors.scss';
 
-.footer {
-  margin-top: 15px;
-}
+  .basket {
+    transform: translateX(0);
+    position: fixed;
+    bottom: 0;
+    padding: 5px 15px;
+    opacity: 0.9;
+    border-radius: 5px;
+    cursor: default;
+    transition: all 250ms ease;
+    max-width: max-content;
+    overflow-y: auto;
 
-.bag {
-  width: 2vw;
-  margin-right: -5px;
-  align-self: flex-start;
-  cursor: pointer;
+    &.light {
+      background: $light;
+      color: $dark;
+      box-shadow: 0 0 16px $grey;
+    }
 
-  &.dark {
-    fill: #f4f4f4;
+    &.dark {
+      background: $dark;
+      color: $light;
+    }
+
+    .content {
+      max-height: 30vh;
+      display: flex;
+      flex-flow: column wrap;
+    }
   }
 
-  &.light {
-    fill: #2c3e50;
+  .footer {
+    margin-top: 15px;
   }
-}
 
-.hide {
-  padding: 5px;
-  transform: translateX(-100%);
-  opacity: 0.5;
-  color: #2c3e50;
+  .hide {
+    padding: 5px;
+    transform: translate3d(0, 100%, 0);
+    opacity: 0.9;
+    transition: transform 250ms ease, opacity 250ms ease;
 
-  &:hover {
-    opacity: 1;
+    &.light {
+      color: $light;
+    }
+
+    &.dark {
+      color: $dark;
+    }
+
+    &:hover {
+      opacity: 1;
+    }
   }
-}
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: transform 250ms ease, opacity 250ms ease;
-}
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: transform 250ms ease, opacity 250ms ease;
+  }
 
-.fade-enter,
-.fade-leave-to {
-  transform: translateX(-100%);
-  opacity: 0;
-}
+  .fade-enter,
+  .fade-leave-to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 </style>

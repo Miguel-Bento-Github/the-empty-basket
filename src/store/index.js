@@ -1,89 +1,124 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { ADD, CHANGE_THEME } from './mutation-types';
+import {
+  ADD_PRODUCT,
+  CHANGE_THEME,
+  HIDE_BASKET,
+  SET_BACKGROUND,
+  TOGGLE_TOOLTIP,
+  FILL_BASKET,
+  INCREMENT,
+  REMOVE_PRODUCT,
+} from './mutation-types';
+import getters from './getters';
+import updateLocalStorage from '../local-storage/update';
+import useLocalStorage from '../local-storage/use';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     basket: [],
+    hideBasket: false,
+    productsAmount: 0,
     theme: {
       light: true,
       dark: false,
     },
-  },
-  getters: {
-    totalPrice(state) {
-      let result = 0;
-      state.basket.map(({ price, quantity }) => {
-        if (quantity > 1) {
-          price = price * quantity;
-        }
-        result += +price;
-      });
-      return result.toFixed(2);
-    },
-    totalWeight(state) {
-      let result = 0;
-      const unitType = (who, from, to) =>
-        who
-          .toLowerCase()
-          .slice(from, to)
-          .split(' ')
-          .join('');
-
-      state.basket.map((product) => {
-        const weight = (item) => Number(item.replace(/[^0-9.]+/g, ''));
-        if (
-          unitType(product.unit, -2) === 'g' ||
-          unitType(product.unit, -2) === 'ml'
-        ) {
-          if (unitType(product.unit, 2, 4) === 'x') {
-            const units = product.unit.split('x');
-            const factor = units[0];
-            const grams = weight(units[1]);
-
-            result += ((factor * grams) / 1000) * product.quantity;
-            return;
-          } else {
-            result += (weight(product.unit) * product.quantity) / 1000;
-          }
-        } else if (
-          unitType(product.unit, -2) === 'kg' ||
-          unitType(product.unit, -2) === 'l'
-        ) {
-          result += weight(product.unit) * product.quantity;
-        }
-      });
-
-      return Math.round(result * 10) / 10 + ' Kg';
+    tooltip: {
+      active: false,
+      type: '',
     },
   },
+  getters: getters,
   mutations: {
-    [ADD](state, product) {
+    [CHANGE_THEME]({ theme }) {
+      theme.light = !theme.light;
+      theme.dark = !theme.dark;
+    },
+    [SET_BACKGROUND](state, { light }) {
+      const darkColor = '#2c3e50';
+      const lightColor = '#f4f4f4';
+
+      document.body.style.backgroundColor = light ? lightColor : darkColor;
+    },
+    [INCREMENT](state) {
+      state.productsAmount += 1;
+    },
+    [ADD_PRODUCT](state, product) {
+      let id = '';
       let inBasket = false;
       state.basket.map((item) => {
         if (item._id === product._id) {
+          id = item._id;
           item.quantity += 1;
           inBasket = true;
         }
       });
 
-      if (!inBasket) {
+      if (inBasket) {
+        updateLocalStorage(id);
+      } else {
         state.basket.push(product);
+        useLocalStorage(state.basket);
       }
     },
-    [CHANGE_THEME](state) {
-      state.theme.light = !state.theme.light;
-      state.theme.dark = !state.theme.dark;
+    [REMOVE_PRODUCT]({ basket }, { id, quantity }) {
+      console.log(basket);
+
+      const index = basket.indexOf(id);
+
+      basket.map((item) => {
+        if (item._id === id && !quantity <= 1) {
+          item.quantity -= 1;
+        }
+      });
+
+      if (quantity === 1 && index !== -1) {
+        basket.splice(index, 1);
+      }
+      useLocalStorage(basket);
+    },
+    [TOGGLE_TOOLTIP](state, payload) {
+      state.tooltip.active = true;
+      state.tooltip.type = payload;
+
+      setTimeout(() => {
+        state.tooltip.active = false;
+        state.tooltip.type = '';
+      }, 6000);
+    },
+    [FILL_BASKET](state, payload) {
+      state.basket = payload;
+    },
+    [HIDE_BASKET](state, payload) {
+      state.hideBasket = payload || !state.hideBasket;
     },
   },
   actions: {
-    add(context, payload) {
-      context.commit(ADD, payload);
-    },
-    changeTheme(context) {
+    [CHANGE_THEME](context) {
       context.commit(CHANGE_THEME);
+    },
+    [SET_BACKGROUND](context, payload) {
+      context.commit(SET_BACKGROUND, payload);
+    },
+    [ADD_PRODUCT](context, payload) {
+      context.commit(ADD_PRODUCT, payload);
+    },
+    [REMOVE_PRODUCT](context, id) {
+      context.commit(REMOVE_PRODUCT, id);
+    },
+    [INCREMENT](context) {
+      context.commit(INCREMENT);
+    },
+    [TOGGLE_TOOLTIP](context, payload) {
+      context.commit(TOGGLE_TOOLTIP, payload);
+    },
+    [FILL_BASKET](context, payload) {
+      context.commit(FILL_BASKET, payload);
+    },
+    [HIDE_BASKET](context, payload) {
+      context.commit(HIDE_BASKET, payload);
     },
   },
 });

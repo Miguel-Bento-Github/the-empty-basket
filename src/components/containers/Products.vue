@@ -10,7 +10,7 @@
           -->
           <span
             class="letter"
-            :class="isTyping && 'letter-active'"
+            :class="isTyping"
             :style="letterStyle(i)"
             v-for="(letter, i) in title"
             :key="letter.id"
@@ -27,7 +27,6 @@
         v-for="(product, index) in products"
         :key="product._id"
         :data-index="index"
-        @mouseenter="showAddToCart = true"
       >
         <div
           class="table-item"
@@ -50,6 +49,7 @@
           name="name"
         >
           <span
+            :class="showDetails.theme"
             class="table-item-details"
             v-if="showDetails.active && showDetails.index === index"
             >{{ product.name }}</span
@@ -57,14 +57,9 @@
           <span v-else>{{ product.name }}</span>
         </div>
         <div class="table-item" name="price">{{ product.price }}</div>
-        <div class="table-item row-end" name="unit">
+        <div class="table-item table-item-last" name="unit">
           {{ product.unit }}
-          <span
-            class="add-to-cart"
-            @click="addToCart(product)"
-            v-if="showAddToCart"
-            >add</span
-          >
+          <span class="add-to-cart" @click="addToCart(product)">add</span>
         </div>
       </div>
     </transition-group>
@@ -72,154 +67,176 @@
 </template>
 
 <script>
-import getRandomIntFrom from "../../utils/get-random-int";
+  import getRandomIntFrom from '../../utils/get-random-int';
+  import detectMobile from '../../utils/detect-mobile';
+  import { TOGGLE_TOOLTIP } from '../../store/mutation-types';
 
-export default {
-  name: "products",
-  props: ["products", "colors", "isTyping", "loading", "showHeader", "theme"],
-  data() {
-    return {
-      name: "",
-      unit: "",
-      category: "",
-      price: 0,
-      showAddToCart: false,
-      headers: ["cat.", "name", "price", "unit"],
-      showDetails: {
-        active: false,
-        index: 0
-      }
-    };
-  },
-  methods: {
-    letterStyle(i) {
-      return (
-        i % getRandomIntFrom(2) === 0 && {
-          filter: `drop-shadow(0 0 ${getRandomIntFrom(8)}px ${this.colors[i]})`
+  export default {
+    name: 'products',
+    props: ['products', 'colors', 'isTyping', 'loading', 'showHeader', 'theme'],
+    data() {
+      return {
+        name: '',
+        unit: '',
+        category: '',
+        price: 0,
+        headers: ['cat.', 'name', 'price', 'unit'],
+        showDetails: {
+          active: false,
+          index: 0,
+          theme: this.theme,
+        },
+      };
+    },
+    methods: {
+      detectMobile,
+      requestTooltip() {
+        this.$store.dispatch(TOGGLE_TOOLTIP, 'BAG_INTRO');
+      },
+      addToCart(product) {
+        if (!this.$store.state.productsAmount) {
+          this.requestTooltip();
         }
-      );
+        // using set will make the property reactive.
+        if (!product.quantity) {
+          this.$set(product, ['quantity'], 1);
+        }
+        this.$store.dispatch('ADD_PRODUCT', product);
+        this.$store.dispatch('INCREMENT');
+      },
+      openDetails(index) {
+        this.showDetails.active = true;
+        this.showDetails.index = index;
+      },
+      letterStyle(i) {
+        return (
+          i % getRandomIntFrom(2) === 0 && {
+            filter: `drop-shadow(0 0 ${getRandomIntFrom(8)}px ${
+              this.colors[i]
+            })`,
+          }
+        );
+      },
     },
-    detectMobile() {
-      return window.innerWidth <= 450 && window.innerWidth <= 600;
+    computed: {
+      titles() {
+        const headers = [...this.headers];
+        if (!this.detectMobile()) {
+          headers[0] = 'category';
+        }
+        return headers;
+      },
     },
-    openDetails(index) {
-      this.showDetails.active = true;
-      this.showDetails.index = index;
-    },
-    addToCart(product) {
-      // using set will make the property reactive.
-      if (!product.quantity) {
-        this.$set(product, ["quantity"], 1);
-      }
-      this.$store.dispatch("add", product);
-    }
-  },
-  computed: {
-    titles() {
-      const headers = [...this.headers];
-      if (!this.detectMobile()) {
-        headers[0] = "category";
-      }
-      return headers;
-    }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-.table {
-  margin-top: 5vh;
+  @import '../../colors.scss';
 
-  &-header,
-  &-body {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    text-transform: capitalize;
-    cursor: default;
-  }
+  .table {
+    margin-top: 5vh;
 
-  &-body {
-    transition: color 150ms linear, background-color 150ms linear;
+    &-header,
+    &-body {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+      text-transform: capitalize;
+      cursor: default;
+    }
 
-    &.dark {
-      &:nth-child(even) {
-        background-color: rgba(#f4f4f4, 0.2);
+    &-body {
+      transition: color 150ms linear, background-color 150ms linear;
+
+      &.dark {
+        &:nth-child(even) {
+          background-color: rgba($light, 0.2);
+        }
+
+        &:hover {
+          color: $black;
+          background-color: rgba($light, 0.6);
+        }
       }
 
-      &:hover {
-        color: #1a2530;
-        background-color: rgba(#f4f4f4, 0.6);
+      &.light {
+        &:nth-child(odd) {
+          background-color: rgba($black, 0.2);
+        }
+
+        &:hover {
+          color: $light;
+          background-color: rgba($black, 0.6);
+        }
       }
     }
 
-    &.light {
-      &:nth-child(odd) {
-        background-color: rgba(#1a2530, 0.2);
+    &-item {
+      width: 100%;
+      padding: 5px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+
+      &-details {
+        transition: all 250ms 50ms linear;
+
+        &.light {
+          background: #72787e;
+          box-shadow: 2px 2px 4px #61666b, -2px -2px 4px #838a91;
+        }
+
+        &.dark {
+          background: #546371;
+          box-shadow: 2px 2px 4px #475460, -2px -2px 4px #617282;
+        }
+
+        &:hover,
+        &:focus {
+          width: max-content;
+          position: absolute;
+          color: $light;
+          padding: 0 8px;
+          border-radius: 2px;
+        }
       }
 
-      &:hover {
-        color: #f4f4f4;
-        background-color: rgba(#1a2530, 0.6);
+      &-last {
+        display: flex;
+        justify-content: space-between;
       }
+    }
+
+    .control {
+      display: flex;
+      align-items: center;
     }
   }
 
-  &-item {
-    width: 100%;
-    padding: 5px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  .letter {
+    transition: color 500ms ease-out;
+  }
 
-    &-details {
-      transition: all 250ms 50ms linear;
+  .add-to-cart {
+    cursor: pointer;
 
-      &:hover {
-        width: max-content;
-        position: absolute;
-        background: #1a2530;
-        color: #f4f4f4;
-        padding: 0 8px;
-      }
+    &:hover {
+      filter: drop-shadow(0 0 4px $grey);
     }
   }
 
-  .control {
-    display: flex;
-    align-items: center;
+  .fade {
+    &-enter-active {
+      transition: all 0.3s ease-out;
+    }
+
+    &-leave-active {
+      transition: all 0.5s ease-out;
+    }
+
+    &-enter,
+    &-leave-to {
+      transform: translateY(-10px);
+      opacity: 0;
+    }
   }
-}
-
-.letter {
-  transition: color 500ms ease-out;
-}
-
-.fade {
-  &-enter-active {
-    transition: all 0.3s ease-out;
-  }
-
-  &-leave-active {
-    transition: all 0.5s ease-out;
-  }
-
-  &-enter,
-  &-leave-to {
-    transform: translateY(-10px);
-    opacity: 0;
-  }
-}
-
-.row-end {
-  display: flex;
-  justify-content: space-between;
-}
-
-.add-to-cart {
-  cursor: pointer;
-
-  &:hover {
-    font-weight: 700;
-  }
-}
 </style>
