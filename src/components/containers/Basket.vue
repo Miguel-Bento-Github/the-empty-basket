@@ -118,6 +118,7 @@ export default {
 .fade-leave-active {
   transition: transform 250ms ease, opacity 250ms ease;
 }
+
 .fade-enter,
 .fade-leave-to {
   transform: translateX(-100%);

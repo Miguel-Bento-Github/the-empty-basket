@@ -4,7 +4,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xml:space="preserve"
     version="1.1"
-    style="shape-rendering:geometricPrecision;text-rendering:geometricPrecision;image-rendering:optimizeQuality;"
+    style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality;"
     viewBox="0 0 333 416.25"
     x="0px"
     y="0px"
