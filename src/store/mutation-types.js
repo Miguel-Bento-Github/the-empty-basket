@@ -6,3 +6,4 @@ export const FILL_BASKET = 'FILL_BASKET';
 export const SET_BACKGROUND = 'SET_BACKGROUND';
 export const TOGGLE_TOOLTIP = 'TOGGLE_TOOLTIP';
 export const INCREMENT = 'INCREMENT';
+export const DECREMENT = 'DECREMENT';

@@ -2,11 +2,14 @@
   <transition name="fade">
     <div
       v-if="basket.length > 0"
-      :class="[{ hide: hide }, theme]"
+      :class="[{ hide: hide, 'basket-wide': fullWidth }, theme]"
       class="basket"
     >
       <header class="header">
         <h1 class="title">Basket</h1>
+        <span @click="fullWidth = !fullWidth" class="resize">{{
+          fullWidth ? 'collapse' : 'expand'
+        }}</span>
       </header>
       <div class="content">
         <basket-product
@@ -37,6 +40,11 @@
         required: true,
       },
     },
+    data() {
+      return {
+        fullWidth: false,
+      };
+    },
     components: {
       BasketProduct,
     },
@@ -63,54 +71,88 @@
   .basket {
     transform: translateX(0);
     position: fixed;
-    bottom: 0;
-    padding: 5px 15px;
+    bottom: 16px;
+    padding: 8px 16px;
     opacity: 0.9;
     border-radius: 5px;
     cursor: default;
-    transition: all 250ms ease;
-    max-width: max-content;
     overflow-y: auto;
+    min-width: 30%;
+    max-width: 92%;
+    transition: all 250ms ease;
+
+    &-wide {
+      min-width: 92%;
+
+      .product {
+        min-width: min-content;
+      }
+    }
+
+    &:hover {
+      opacity: 0.95;
+    }
 
     &.light {
       background: $light;
       color: $dark;
-      box-shadow: 0 0 16px $grey;
+      box-shadow: -4px -4px 8px lighten($grey, 4%), 4px 4px 8px $grey;
+
+      &:hover {
+        box-shadow: -2px -2px 4px lighten($grey, 4%), 2px 2px 4px $grey;
+      }
     }
 
     &.dark {
       background: $dark;
       color: $light;
+      box-shadow: -4px -4px 8px lighten($dark, 4%), 4px 4px 8px $black;
+
+      &:hover {
+        box-shadow: -2px -2px 4px lighten($dark, 4%), 2px 2px 4px $black;
+      }
+    }
+
+    .header {
+      position: relative;
+
+      .resize {
+        position: absolute;
+        right: 16px;
+        top: 8px;
+        cursor: pointer;
+      }
     }
 
     .content {
-      max-height: 30vh;
+      max-height: 20vh;
       display: flex;
       flex-flow: column wrap;
+    }
+
+    &.hide {
+      padding: 5px;
+      transform: translate3d(-50%, 100%, 0) scale(0);
+      opacity: 0.9;
+      transition: all 250ms ease;
+      filter: none;
+
+      &.light {
+        color: $light;
+      }
+
+      &.dark {
+        color: $dark;
+      }
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 
   .footer {
     margin-top: 15px;
-  }
-
-  .hide {
-    padding: 5px;
-    transform: translate3d(0, 100%, 0);
-    opacity: 0.9;
-    transition: transform 250ms ease, opacity 250ms ease;
-
-    &.light {
-      color: $light;
-    }
-
-    &.dark {
-      color: $dark;
-    }
-
-    &:hover {
-      opacity: 1;
-    }
   }
 
   .fade-enter-active,

@@ -28,7 +28,11 @@
   import Basket from './components/containers/Basket';
   import findProducts from './utils/find-products';
   import theme from './utils/theme';
-  import { SET_BACKGROUND, FILL_BASKET } from './store/mutation-types';
+  import {
+    SET_BACKGROUND,
+    FILL_BASKET,
+    INCREMENT,
+  } from './store/mutation-types';
 
   export default {
     name: 'App',
@@ -45,8 +49,8 @@
         filter: null,
         showHeader: false,
         theme: {
-          light: true,
-          dark: false,
+          light: false,
+          dark: true,
         },
       };
     },
@@ -86,6 +90,21 @@
           localStorage.removeItem('basket');
         }
       }
+
+      const totalProducts = localStorage.getItem('total-products');
+      if (totalProducts) {
+        this.$store.dispatch(INCREMENT, JSON.parse(totalProducts));
+      }
+
+      // TODO
+      // const theme = localStorage.getItem('theme');
+      // if (theme) {
+      //   try {
+      //     this.$store.dispatch(SET_BACKGROUND, JSON.parse(theme));
+      //   } catch {
+      //     localStorage.removeItem('theme');
+      //   }
+      // }
     },
   };
 </script>
@@ -103,15 +122,9 @@
   #app {
     font-family: 'Inconsolata', monospace;
     font-size: calc(13px + (26 - 13) * ((100vw - 300px) / (1600 - 300)));
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     padding: 2vh 4vw;
     line-height: 1.3;
     min-height: 100vh;
-
-    @media screen and (max-width: 450px) {
-      min-height: 85vh;
-    }
 
     &.dark {
       color: $light;
