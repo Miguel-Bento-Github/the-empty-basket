@@ -48,6 +48,7 @@
 <script>
   import Bag from '../icons/Bag';
   import Odd from '../icons/Odd';
+  import { CHANGE_THEME, SET_BACKGROUND } from '../../store/mutation-types';
 
   export default {
     name: 'filter-items',
@@ -67,6 +68,8 @@
     methods: {
       changeTheme() {
         this.$emit('change-theme');
+        this.$store.dispatch(CHANGE_THEME);
+        this.$store.dispatch(SET_BACKGROUND, this.theme);
       },
       submit() {
         if (!this.showHeader) {

@@ -23,7 +23,12 @@
 </template>
 
 <script>
-  import { REMOVE_PRODUCT, ADD_PRODUCT } from '../store/mutation-types';
+  import {
+    REMOVE_PRODUCT,
+    ADD_PRODUCT,
+    INCREMENT,
+    DECREMENT,
+  } from '../store/mutation-types';
   export default {
     name: 'basket-product',
     props: {
@@ -40,15 +45,12 @@
     },
     methods: {
       decrement() {
-        const payload = {
-          id: this.product._id,
-          quantity: this.product.quantity,
-        };
-
-        this.$store.dispatch(REMOVE_PRODUCT, payload);
+        this.$store.dispatch(REMOVE_PRODUCT, this.product._id);
+        this.$store.dispatch(DECREMENT);
       },
       increment() {
         this.$store.dispatch(ADD_PRODUCT, this.product);
+        this.$store.dispatch(INCREMENT);
       },
     },
     filters: {
@@ -62,6 +64,11 @@
 <style lang="scss" scoped>
   @import '../colors.scss';
 
+  .product {
+    min-width: 100%;
+    margin-right: 20px;
+  }
+
   .product,
   .product-amount-control {
     display: flex;
@@ -70,9 +77,10 @@
   }
 
   .product-amount-control {
-    padding-left: 16px;
+    padding: 0 16px;
 
     .item {
+      transition: filter 250ms ease;
       &:hover {
         cursor: pointer;
       }
