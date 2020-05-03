@@ -17,55 +17,56 @@
 </template>
 
 <script>
-  export default {
-    name: 'Odd',
-    props: ['showHead'],
-  };
+export default {
+  name: "Odd",
+  props: ["showHead"]
+};
 </script>
 
 <style lang="scss" scoped>
-  .circle {
-    cursor: pointer;
-    fill: #93dc80;
+.circle {
+  cursor: pointer;
+  fill: #93dc80;
+}
+
+.odd {
+  min-width: 24px;
+  width: 4vw;
+  max-width: 48px;
+  padding: 1px;
+  cursor: pointer;
+  animation: disappear 2s linear reverse;
+
+  @media screen and (max-width: 450px) {
+    position: fixed;
+    z-index: 1;
+    bottom: 2vh;
+    right: 0;
   }
 
-  .odd {
-    min-width: 48px;
-    width: 4vw;
-    padding: 1px;
-    cursor: pointer;
-    animation: disappear 2s linear reverse;
+  &.light {
+    fill: #ccc;
+    filter: drop-shadow(0 0 12px #fff);
+    transition: filter 2s linear;
 
-    @media screen and (max-width: 450px) {
-      position: fixed;
-      z-index: 1;
-      bottom: 2vh;
-      right: 0;
-    }
-
-    &.light {
-      fill: #ccc;
-      filter: drop-shadow(0 0 12px #fff);
-      transition: filter 2s linear;
-
-      &:hover {
-        filter: drop-shadow(0 0 2px #000);
-      }
-    }
-
-    &.dark {
-      fill: #ccc;
-      filter: drop-shadow(0 0 6px #000);
+    &:hover {
+      filter: drop-shadow(0 0 2px #000);
     }
   }
 
-  @keyframes disappear {
-    from {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0;
-    }
+  &.dark {
+    fill: #ccc;
+    filter: drop-shadow(0 0 6px #000);
   }
+}
+
+@keyframes disappear {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
 </style>

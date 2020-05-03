@@ -29,64 +29,63 @@
 </template>
 
 <script>
-  import { HIDE_BASKET, TOGGLE_TOOLTIP } from '../../store/mutation-types';
+import { HIDE_BASKET, TOGGLE_TOOLTIP } from "../../store/mutation-types";
 
-  export default {
-    name: 'Bag',
-    props: ['value'],
-    methods: {
-      handleVisibility() {
-        const { state } = this.$store;
-        if (state.tooltip.active) {
-          this.$store.dispatch(TOGGLE_TOOLTIP, false);
-        }
-        if (state.basket.length) {
-          this.$store.dispatch(HIDE_BASKET);
-        }
-      },
-    },
-    computed: {
-      totalProducts() {
-        const { productsAmount } = this.$store.state;
-        return productsAmount > 0 ? productsAmount : '';
-      },
-    },
-  };
+export default {
+  name: "Bag",
+  methods: {
+    handleVisibility() {
+      const { state } = this.$store;
+      if (state.tooltip.active) {
+        this.$store.dispatch(TOGGLE_TOOLTIP, false);
+      }
+      if (state.basket.length) {
+        this.$store.dispatch(HIDE_BASKET);
+      }
+    }
+  },
+  computed: {
+    totalProducts() {
+      const { productsAmount } = this.$store.state;
+      return productsAmount > 0 ? productsAmount : "";
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  @import '../../colors.scss';
+@import "../../colors.scss";
 
-  .bag {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 4vw;
-    max-width: 64px;
-    cursor: pointer;
-    transition: filter 250ms linear;
-    transform: translateY(-50%);
+.bag {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 4vw;
+  max-width: 64px;
+  cursor: pointer;
+  transition: filter 250ms linear;
+  transform: translateY(-50%);
 
-    &.light {
-      fill: $dark;
-    }
-
-    &.dark {
-      filter: drop-shadow(0 0 6px $light);
-      fill: $light;
-    }
-
-    &:hover {
-      filter: drop-shadow(0 0 1px $black);
-    }
+  &.light {
+    fill: $dark;
   }
 
-  .amount {
-    font-size: 110px;
-    transform: rotate3d(100, 1100, 280, -25deg);
-
-    &-small {
-      font-size: 75px;
-    }
+  &.dark {
+    filter: drop-shadow(0 0 6px $light);
+    fill: $light;
   }
+
+  &:hover {
+    filter: drop-shadow(0 0 1px $black);
+  }
+}
+
+.amount {
+  font-size: 110px;
+  transform: rotate3d(100, 1100, 280, -25deg);
+
+  &-small {
+    font-size: 75px;
+  }
+}
 </style>
