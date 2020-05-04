@@ -98,6 +98,10 @@ export default new Vuex.Store({
             basket.splice(index, 1);
           }
         }
+
+        if (basket.length === 0) {
+          localStorage.removeItem('total-products');
+        }
       });
 
       useLocalStorage(basket);

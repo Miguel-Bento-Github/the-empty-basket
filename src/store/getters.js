@@ -45,8 +45,7 @@ function totalWeight(state) {
   return Math.round(result * 10) / 10 + ' Kg';
 }
 
-const getters = {
+export default {
   totalPrice,
   totalWeight,
 };
-export default getters;
