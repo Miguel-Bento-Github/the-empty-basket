@@ -29,8 +29,8 @@
   import Products from './components/containers/Products';
   import Basket from './components/containers/Basket';
   import findProducts from './utils/find-products';
-  import theme from './utils/theme';
-  import { actions } from './store/variables';
+  import headersTheme from './utils/headers-theme';
+  import { actionTypes } from './store/variables';
 
   export default {
     name: 'App',
@@ -49,18 +49,21 @@
         filter: null,
         showHeader: false,
         theme: {
-          light: false,
-          dark: true,
+          light: true,
+          dark: false,
         },
       };
     },
     methods: {
       findProducts,
+      defineTheme() {
+        this.theme = JSON.parse(localStorage.theme);
+      },
       changeTheme() {
         this.theme.light = !this.theme.light;
         this.theme.dark = !this.theme.dark;
 
-        this.$store.dispatch(actions.CHANGE_THEME, this.theme);
+        this.$store.dispatch(actionTypes.CHANGE_THEME, this.theme);
       },
       setHeaderDisplay(show) {
         this.showHeader = show;
@@ -75,10 +78,10 @@
         return colors;
       },
       populateBasket() {
-        const basket = localStorage.getItem('basket');
+        const basket = localStorage.basket;
         if (basket) {
           try {
-            this.$store.dispatch(actions.FILL_BASKET, JSON.parse(basket));
+            this.$store.dispatch(actionTypes.FILL_BASKET, JSON.parse(basket));
           } catch (error) {
             localStorage.removeItem('basket');
             throw new Error(
@@ -88,12 +91,14 @@
         }
       },
       addTotalProducts() {
-        const totalProducts = localStorage.getItem('total-products');
+        const totalProducts = localStorage.totalProducts;
         if (totalProducts > 0) {
           try {
-            this.$store.dispatch(actions.INCREMENT, JSON.parse(totalProducts));
+            this.$store.dispatch(
+              actionTypes.INCREMENT,
+              JSON.parse(totalProducts)
+            );
           } catch (error) {
-            localStorage.getItem('total-products');
             throw new Error(
               `Error adding total amount of products at addTotalProducts(), ${error.message}`
             );
@@ -103,12 +108,13 @@
     },
     computed: {
       colors() {
-        return this.theme.light ? theme.light : theme.dark;
+        return this.theme.light ? headersTheme.light : headersTheme.dark;
       },
     },
     mounted() {
       this.populateBasket();
       this.addTotalProducts();
+      this.defineTheme();
     },
   };
 </script>

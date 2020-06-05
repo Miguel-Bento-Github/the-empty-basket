@@ -7,9 +7,7 @@
     >
       <header class="header">
         <h1 class="title">Basket</h1>
-        <span @click="fullWidth = !fullWidth" class="resize">{{
-          fullWidth ? 'collapse' : 'expand'
-        }}</span>
+        <resize @resize="fullWidth = !fullWidth" />
       </header>
       <div class="content">
         <basket-product
@@ -30,6 +28,7 @@
 <script>
   import store from '../../store/index';
   import BasketProduct from '../BasketProduct';
+  import Resize from '../icons/Resize';
 
   export default {
     store,
@@ -47,6 +46,7 @@
     },
     components: {
       BasketProduct,
+      Resize,
     },
     computed: {
       hide() {
@@ -110,17 +110,6 @@
 
       &:hover {
         box-shadow: -2px -2px 4px lighten($dark, 4%), 2px 2px 4px $black;
-      }
-    }
-
-    .header {
-      position: relative;
-
-      .resize {
-        position: absolute;
-        right: 16px;
-        top: 8px;
-        cursor: pointer;
       }
     }
 

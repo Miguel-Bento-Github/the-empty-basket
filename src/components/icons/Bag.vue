@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import { actions } from '../../store/variables';
+  import { actionTypes } from '../../store/variables';
 
   export default {
     name: 'Bag',
@@ -37,10 +37,10 @@
       handleVisibility() {
         const { state } = this.$store;
         if (state.tooltip.active) {
-          this.$store.dispatch(actions.TOGGLE_TOOLTIP, false);
+          this.$store.dispatch(actionTypes.TOGGLE_TOOLTIP, false);
         }
         if (state.basket.length) {
-          this.$store.dispatch(actions.HIDE_BASKET);
+          this.$store.dispatch(actionTypes.HIDE_BASKET);
         }
       },
     },

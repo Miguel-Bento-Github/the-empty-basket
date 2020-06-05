@@ -50,7 +50,6 @@
 <script>
   import Bag from '../icons/Bag';
   import Odd from '../icons/Odd';
-  import { actions } from '../../store/variables';
 
   export default {
     name: 'filter-items',
@@ -70,14 +69,13 @@
     methods: {
       changeTheme() {
         this.$emit('change-theme');
-        this.$store.dispatch(actions.CHANGE_THEME);
       },
       submit() {
         if (!this.showHeader) {
           this.showHeader = true;
           this.$emit('show-header', this.showHeader);
         }
-        this.$emit('change-lights');
+
         if (isNaN(+this.filter)) {
           this.$emit('filter', this.filter.toLowerCase());
         } else {

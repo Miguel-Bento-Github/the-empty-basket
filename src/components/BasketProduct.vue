@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import { actions } from '../store/variables';
+  import { actionTypes } from '../store/variables';
 
   export default {
     name: 'basket-product',
@@ -41,12 +41,12 @@
     },
     methods: {
       decrement() {
-        this.$store.dispatch(actions.REMOVE_PRODUCT, this.product._id);
-        this.$store.dispatch(actions.DECREMENT);
+        this.$store.dispatch(actionTypes.REMOVE_PRODUCT, this.product._id);
+        this.$store.dispatch(actionTypes.DECREMENT);
       },
       increment() {
-        this.$store.dispatch(actions.ADD_PRODUCT, this.product);
-        this.$store.dispatch(actions.INCREMENT);
+        this.$store.dispatch(actionTypes.ADD_PRODUCT, this.product);
+        this.$store.dispatch(actionTypes.INCREMENT);
       },
     },
     filters: {

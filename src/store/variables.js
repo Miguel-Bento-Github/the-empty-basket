@@ -19,7 +19,7 @@ export const mutations = {
   DECREMENT,
 };
 
-export const actions = {
+export const actionTypes = {
   ADD_PRODUCT,
   REMOVE_PRODUCT,
   CHANGE_THEME,

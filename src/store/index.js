@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { mutations, actions } from './variables';
+import { mutations } from './variables';
 import getters from './getters';
 import updateLocalStorage from '../local-storage/update-product';
 import useLocalStorage from '../local-storage/use-product';
+import actions from './actions';
 
 Vue.use(Vuex);
 
@@ -23,18 +24,17 @@ export default new Vuex.Store({
   },
   getters: getters,
   mutations: {
-    [mutations.CHANGE_THEME]({ theme }) {
-      theme.light = !theme.light;
-      theme.dark = !theme.dark;
+    [mutations.CHANGE_THEME](state, payload) {
+      state.theme = payload;
 
-      localStorage.setItem('theme', JSON.stringify(theme));
+      localStorage.setItem('theme', JSON.stringify(payload));
     },
     [mutations.INCREMENT](state, payload) {
       if (payload) {
         state.productsAmount = payload;
       } else {
         state.productsAmount += 1;
-        localStorage.setItem('total-products', state.productsAmount);
+        localStorage.setItem('totalProducts', state.productsAmount);
       }
     },
     [mutations.DECREMENT](state, payload) {
@@ -42,7 +42,7 @@ export default new Vuex.Store({
         state.productsAmount = payload;
       } else {
         state.productsAmount -= 1;
-        localStorage.setItem('total-products', state.productsAmount);
+        localStorage.setItem('totalProducts', state.productsAmount);
       }
     },
     [mutations.ADD_PRODUCT](state, product) {
@@ -74,10 +74,6 @@ export default new Vuex.Store({
             basket.splice(index, 1);
           }
         }
-
-        if (basket.length === 0) {
-          localStorage.removeItem('total-products');
-        }
       });
 
       useLocalStorage(basket);
@@ -98,33 +94,5 @@ export default new Vuex.Store({
       state.hideBasket = payload || !state.hideBasket;
     },
   },
-  actions: {
-    [actions.NETWORK_ERROR](context) {
-      context.commit(mutations.NETWORK_ERROR);
-    },
-    [actions.CHANGE_THEME](context) {
-      context.commit(mutations.CHANGE_THEME);
-    },
-    [actions.ADD_PRODUCT](context, payload) {
-      context.commit(mutations.ADD_PRODUCT, payload);
-    },
-    [actions.REMOVE_PRODUCT](context, id) {
-      context.commit(mutations.REMOVE_PRODUCT, id);
-    },
-    [actions.INCREMENT](context, payload) {
-      context.commit(mutations.INCREMENT, payload);
-    },
-    [actions.DECREMENT](context, payload) {
-      context.commit(mutations.DECREMENT, payload);
-    },
-    [actions.TOGGLE_TOOLTIP](context, payload) {
-      context.commit(mutations.TOGGLE_TOOLTIP, payload);
-    },
-    [actions.FILL_BASKET](context, payload) {
-      context.commit(mutations.FILL_BASKET, payload);
-    },
-    [actions.HIDE_BASKET](context, payload) {
-      context.commit(mutations.HIDE_BASKET, payload);
-    },
-  },
+  actions: actions,
 });

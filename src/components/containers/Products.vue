@@ -69,7 +69,7 @@
 <script>
   import getRandomIntFrom from '../../utils/get-random-int';
   import detectMobile from '../../utils/detect-mobile';
-  import { actions } from '../../store/variables';
+  import { actionTypes } from '../../store/variables';
 
   export default {
     name: 'products',
@@ -91,7 +91,7 @@
     methods: {
       detectMobile,
       requestTooltip() {
-        this.$store.dispatch(actions.TOGGLE_TOOLTIP, 'BAG_INTRO');
+        this.$store.dispatch(actionTypes.TOGGLE_TOOLTIP, 'BAG_INTRO');
       },
       addToCart(product) {
         if (!this.$store.state.productsAmount) {
@@ -101,8 +101,8 @@
         if (!product.quantity) {
           this.$set(product, ['quantity'], 1);
         }
-        this.$store.dispatch(actions.ADD_PRODUCT, product);
-        this.$store.dispatch(actions.INCREMENT);
+        this.$store.dispatch(actionTypes.ADD_PRODUCT, product);
+        this.$store.dispatch(actionTypes.INCREMENT);
       },
       openDetails(index) {
         this.showDetails.active = true;
