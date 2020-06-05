@@ -18,9 +18,6 @@ function totalPrice(state) {
 }
 
 /**
- * This function requires string control.
- * This is not ideal but we have no control over the data as it's scrapped.
- *
  * Checks if measurement unit is grams or milliliters.
  * If so, will check for the existence of a multiplier symbol 'x'.
  * Some items measurement units have a factor and require the extra logic.
@@ -35,15 +32,15 @@ function totalPrice(state) {
  */
 function totalWeight(state) {
   /**
-   * @param {string} whom
-   * @param {number} from slice starting position
-   * @param {number} to slice ending position
-   * @returns {string}
+   * Receives a string with a number and measurement unit
+   *
+   * @param {string} weight
+   * @returns {string} measurement unit
    */
-  const unitType = (whom, from, to) => {
-    return whom
+  const findMeasurementUnit = (weight) => {
+    return weight
       .toLowerCase()
-      .slice(from, to)
+      .slice(-2)
       .split(' ')
       .join('');
   };
@@ -54,19 +51,18 @@ function totalWeight(state) {
     const toNumber = (item) => Number(item.replace(/[^0-9.]+/g, ''));
 
     if (
-      unitType(unit, -2) === measurementUnits.grams ||
-      unitType(unit, -2) === measurementUnits.milliliters
+      findMeasurementUnit(unit) === measurementUnits.grams ||
+      findMeasurementUnit(unit) === measurementUnits.milliliters
     ) {
-      if (unitType(unit, 2, 4) === 'x') {
+      if (unit.includes('x')) {
         const [factor, grams] = unit.split('x');
-
         result += ((factor * toNumber(grams)) / 1000) * quantity;
       } else {
         result += (toNumber(unit) * quantity) / 1000;
       }
     } else if (
-      unitType(unit, -2) === measurementUnits.kilograms ||
-      unitType(unit, -2) === measurementUnits.liters
+      findMeasurementUnit(unit) === measurementUnits.kilograms ||
+      findMeasurementUnit(unit) === measurementUnits.liters
     ) {
       result += toNumber(unit) * quantity;
     }

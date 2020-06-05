@@ -11,7 +11,7 @@
           <span
             class="letter"
             :class="isTyping"
-            :style="letterStyle(i)"
+            :style="titleStyle(i)"
             v-for="(letter, i) in title"
             :key="letter.id"
             >{{ letter }}</span
@@ -69,7 +69,7 @@
 <script>
   import getRandomIntFrom from '../../utils/get-random-int';
   import detectMobile from '../../utils/detect-mobile';
-  import { TOGGLE_TOOLTIP } from '../../store/mutation-types';
+  import { actions } from '../../store/variables';
 
   export default {
     name: 'products',
@@ -80,7 +80,7 @@
         unit: '',
         category: '',
         price: 0,
-        headers: ['cat.', 'name', 'price', 'unit'],
+        categories: ['category', 'name', 'price', 'unit'],
         showDetails: {
           active: false,
           index: 0,
@@ -91,7 +91,7 @@
     methods: {
       detectMobile,
       requestTooltip() {
-        this.$store.dispatch(TOGGLE_TOOLTIP, 'BAG_INTRO');
+        this.$store.dispatch(actions.TOGGLE_TOOLTIP, 'BAG_INTRO');
       },
       addToCart(product) {
         if (!this.$store.state.productsAmount) {
@@ -101,14 +101,14 @@
         if (!product.quantity) {
           this.$set(product, ['quantity'], 1);
         }
-        this.$store.dispatch('ADD_PRODUCT', product);
-        this.$store.dispatch('INCREMENT');
+        this.$store.dispatch(actions.ADD_PRODUCT, product);
+        this.$store.dispatch(actions.INCREMENT);
       },
       openDetails(index) {
         this.showDetails.active = true;
         this.showDetails.index = index;
       },
-      letterStyle(i) {
+      titleStyle(i) {
         return (
           i % getRandomIntFrom(2) === 0 && {
             filter: `drop-shadow(0 0 ${getRandomIntFrom(8)}px ${
@@ -117,14 +117,18 @@
           }
         );
       },
+      changeCategoryCopy(category, copy) {
+        const allCategories = [...this.categories];
+        const categoryIndex = [allCategories.indexOf(category)];
+        allCategories[categoryIndex] = copy;
+        return allCategories;
+      },
     },
     computed: {
       titles() {
-        const headers = [...this.headers];
-        if (!this.detectMobile()) {
-          headers[0] = 'category';
-        }
-        return headers;
+        return !this.detectMobile()
+          ? this.categories
+          : this.changeCategoryCopy('category', 'cat.');
       },
     },
   };

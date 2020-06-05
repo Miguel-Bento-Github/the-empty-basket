@@ -1,9 +1,0 @@
-export const ADD_PRODUCT = 'ADD_PRODUCT';
-export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
-export const CHANGE_THEME = 'CHANGE_THEME';
-export const HIDE_BASKET = 'HIDE_BASKET';
-export const FILL_BASKET = 'FILL_BASKET';
-export const SET_BACKGROUND = 'SET_BACKGROUND';
-export const TOGGLE_TOOLTIP = 'TOGGLE_TOOLTIP';
-export const INCREMENT = 'INCREMENT';
-export const DECREMENT = 'DECREMENT';
