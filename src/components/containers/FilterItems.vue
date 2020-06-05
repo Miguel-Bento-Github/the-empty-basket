@@ -25,9 +25,11 @@
         for product search.
       </p>
     </div>
+
     <div class="tooltip" v-else-if="loading">
       Loading data, please wait...
     </div>
+
     <div class="tooltip" v-else-if="warnUserAboutBag">
       Click on the bag to toggle the basket.
     </div>
@@ -69,7 +71,6 @@
       changeTheme() {
         this.$emit('change-theme');
         this.$store.dispatch(actions.CHANGE_THEME);
-        this.$store.dispatch(actions.SET_BACKGROUND, this.theme);
       },
       submit() {
         if (!this.showHeader) {

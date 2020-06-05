@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="app" :class="theme">
+    <network-error v-if="!network" />
     <filter-items
       :theme="theme"
       :loading="loading"
@@ -23,6 +24,7 @@
 </template>
 
 <script>
+  import NetworkError from './components/NetworkError';
   import FilterItems from './components/containers/FilterItems';
   import Products from './components/containers/Products';
   import Basket from './components/containers/Basket';
@@ -33,12 +35,14 @@
   export default {
     name: 'App',
     components: {
+      NetworkError,
       Products,
       FilterItems,
       Basket,
     },
     data() {
       return {
+        network: true,
         products: [],
         loading: false,
         isTyping: false,
@@ -50,18 +54,16 @@
         },
       };
     },
-    computed: {
-      colors() {
-        return this.theme.light ? theme.light : theme.dark;
-      },
-    },
     methods: {
+      findProducts,
       changeTheme() {
         this.theme.light = !this.theme.light;
         this.theme.dark = !this.theme.dark;
+
+        this.$store.dispatch(actions.CHANGE_THEME, this.theme);
       },
-      setHeaderDisplay(isVisible) {
-        this.showHeader = isVisible;
+      setHeaderDisplay(show) {
+        this.showHeader = show;
       },
       changeColor() {
         this.isTyping = true;
@@ -72,35 +74,41 @@
         }
         return colors;
       },
-      findProducts,
+      populateBasket() {
+        const basket = localStorage.getItem('basket');
+        if (basket) {
+          try {
+            this.$store.dispatch(actions.FILL_BASKET, JSON.parse(basket));
+          } catch (error) {
+            localStorage.removeItem('basket');
+            throw new Error(
+              `Error populating basket at populateBasket(), ${error.message}`
+            );
+          }
+        }
+      },
+      addTotalProducts() {
+        const totalProducts = localStorage.getItem('total-products');
+        if (totalProducts > 0) {
+          try {
+            this.$store.dispatch(actions.INCREMENT, JSON.parse(totalProducts));
+          } catch (error) {
+            localStorage.getItem('total-products');
+            throw new Error(
+              `Error adding total amount of products at addTotalProducts(), ${error.message}`
+            );
+          }
+        }
+      },
     },
-    created() {
-      this.$store.dispatch(actions.SET_BACKGROUND, this.theme);
+    computed: {
+      colors() {
+        return this.theme.light ? theme.light : theme.dark;
+      },
     },
     mounted() {
-      const basket = localStorage.getItem('basket');
-      if (basket) {
-        try {
-          this.$store.dispatch(actions.FILL_BASKET, JSON.parse(basket));
-        } catch {
-          localStorage.removeItem('basket');
-        }
-      }
-
-      const totalProducts = localStorage.getItem('total-products');
-      if (totalProducts > 0) {
-        this.$store.dispatch(actions.INCREMENT, JSON.parse(totalProducts));
-      }
-
-      // TODO
-      // const theme = localStorage.getItem('theme');
-      // if (theme) {
-      //   try {
-      //     this.$store.dispatch(SET_BACKGROUND, JSON.parse(theme));
-      //   } catch {
-      //     localStorage.removeItem('theme');
-      //   }
-      // }
+      this.populateBasket();
+      this.addTotalProducts();
     },
   };
 </script>
