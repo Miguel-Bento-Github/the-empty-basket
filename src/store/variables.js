@@ -3,10 +3,10 @@ const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
 const CHANGE_THEME = 'CHANGE_THEME';
 const HIDE_BASKET = 'HIDE_BASKET';
 const FILL_BASKET = 'FILL_BASKET';
-const SET_BACKGROUND = 'SET_BACKGROUND';
 const TOGGLE_TOOLTIP = 'TOGGLE_TOOLTIP';
 const INCREMENT = 'INCREMENT';
 const DECREMENT = 'DECREMENT';
+const NETWORK_ERROR = 'Network Error';
 
 export const mutations = {
   ADD_PRODUCT,
@@ -14,7 +14,6 @@ export const mutations = {
   CHANGE_THEME,
   HIDE_BASKET,
   FILL_BASKET,
-  SET_BACKGROUND,
   TOGGLE_TOOLTIP,
   INCREMENT,
   DECREMENT,
@@ -26,7 +25,6 @@ export const actions = {
   CHANGE_THEME,
   HIDE_BASKET,
   FILL_BASKET,
-  SET_BACKGROUND,
   TOGGLE_TOOLTIP,
   INCREMENT,
   DECREMENT,
@@ -37,4 +35,8 @@ export const measurementUnits = {
   kilograms: 'kg',
   milliliters: 'ml',
   liters: 'l',
+};
+
+export const errorMessages = {
+  NETWORK_ERROR,
 };

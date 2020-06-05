@@ -29,20 +29,6 @@ export default new Vuex.Store({
 
       localStorage.setItem('theme', JSON.stringify(theme));
     },
-    [mutations.SET_BACKGROUND](state, { light }) {
-      const darkColor = '#2c3e50';
-      const lightColor = '#f4f4f4';
-
-      if (light) {
-        const lightApp = document.querySelector('#app');
-        lightApp.style.color = darkColor;
-        lightApp.style.backgroundColor = lightColor;
-      } else if (!light) {
-        const darkApp = document.querySelector('#app');
-        darkApp.style.color = lightColor;
-        darkApp.style.backgroundColor = darkColor;
-      }
-    },
     [mutations.INCREMENT](state, payload) {
       if (payload) {
         state.productsAmount = payload;
@@ -113,11 +99,11 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    [actions.NETWORK_ERROR](context) {
+      context.commit(mutations.NETWORK_ERROR);
+    },
     [actions.CHANGE_THEME](context) {
       context.commit(mutations.CHANGE_THEME);
-    },
-    [actions.SET_BACKGROUND](context, payload) {
-      context.commit(mutations.SET_BACKGROUND, payload);
     },
     [actions.ADD_PRODUCT](context, payload) {
       context.commit(mutations.ADD_PRODUCT, payload);

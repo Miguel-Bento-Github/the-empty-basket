@@ -74,7 +74,7 @@
     bottom: 16px;
     padding: 8px 16px;
     opacity: 0.9;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: default;
     overflow-y: auto;
     min-width: 30%;
