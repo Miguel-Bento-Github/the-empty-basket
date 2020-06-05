@@ -7,7 +7,7 @@
     >
       <header class="header">
         <h1 class="title">Basket</h1>
-        <resize @resize="fullWidth = !fullWidth" />
+        <resize :theme="theme" @resize="fullWidth = !fullWidth" />
       </header>
       <div class="content">
         <basket-product
@@ -76,10 +76,8 @@
     opacity: 0.9;
     border-radius: 8px;
     cursor: default;
-    overflow-y: auto;
-    min-width: 30%;
-    max-width: 92%;
     transition: all 250ms ease;
+    min-width: 30%;
 
     &-wide {
       min-width: 92%;
@@ -113,10 +111,20 @@
       }
     }
 
+    .header {
+      display: flex;
+      justify-content: space-between;
+      position: sticky;
+      overflow: hidden;
+      width: 100%;
+    }
+
     .content {
       max-height: 20vh;
       display: flex;
       flex-flow: column wrap;
+      overflow-y: hidden;
+      max-width: 92%;
     }
 
     &.hide {
