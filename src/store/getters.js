@@ -50,7 +50,10 @@ function totalWeight(state) {
   state.basket.map(({ unit, quantity }) => {
     const toNumber = (item) => Number(item.replace(/[^0-9.]+/g, ''));
 
-    if (findMeasurementUnit(unit) === MEASUREMENT_UNITS.GRAMS || findMeasurementUnit(unit) === MEASUREMENT_UNITS.MILLILITERS) {
+    if (
+      findMeasurementUnit(unit) === MEASUREMENT_UNITS.GRAMS ||
+      findMeasurementUnit(unit) === MEASUREMENT_UNITS.MILLILITERS
+    ) {
       if (unit.includes('x')) {
         const [factor, grams] = unit.split('x');
         result += ((factor * toNumber(grams)) / 1000) * quantity;

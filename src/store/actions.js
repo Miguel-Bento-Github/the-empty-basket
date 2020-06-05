@@ -1,6 +1,6 @@
 import { MUTATIONS, ACTIONS } from './variables';
 
-const actions = {
+export default {
   [ACTIONS.CHANGE_THEME](context, payload) {
     context.commit(MUTATIONS.CHANGE_THEME, payload);
   },
@@ -26,4 +26,3 @@ const actions = {
     context.commit(MUTATIONS.HIDE_BASKET, payload);
   },
 };
-export default actions;

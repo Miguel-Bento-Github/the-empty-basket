@@ -1,6 +1,6 @@
 import { MUTATIONS } from './variables';
 
-const mutations = {
+export default {
   /**
    * Set theme on state and localStorage.
    *
@@ -91,11 +91,11 @@ const mutations = {
    */
   [MUTATIONS.TOGGLE_TOOLTIP](state, payload) {
     state.tooltip.active = true;
-    state.tooltip.type = payload;
+    state.tooltip.activeType = payload;
 
     setTimeout(() => {
       state.tooltip.active = false;
-      state.tooltip.type = '';
+      state.tooltip.activeType = '';
     }, 6000);
   },
   [MUTATIONS.FILL_BASKET](state, payload) {
@@ -105,4 +105,3 @@ const mutations = {
     state.hideBasket = payload || !state.hideBasket;
   },
 };
-export default mutations;

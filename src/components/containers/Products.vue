@@ -8,9 +8,14 @@
           that are a multiple of a random number between 1 and 2.
           Then applies a drop shadow from a random array of colors
           -->
-          <span class="letter" :class="isTyping" :style="titleStyle(i)" v-for="(letter, i) in title" :key="letter.id">{{
-            letter
-          }}</span>
+          <span
+            class="letter"
+            :class="isTyping"
+            :style="titleStyle(i)"
+            v-for="(letter, i) in title"
+            :key="letter.id"
+            >{{ letter }}</span
+          >
         </h1>
       </div>
     </transition>
@@ -23,15 +28,27 @@
         :key="product._id"
         :data-index="index"
       >
-        <div class="table-item" @mouseleave="openDetails" @click="openDetails(index)" name="category">
-          <span class="table-item-details" v-if="showDetails.active && showDetails.index === index">{{ product.category }}</span>
+        <div
+          class="table-item"
+          @mouseleave="openDetails"
+          @click="openDetails(index)"
+          name="category"
+        >
+          <span
+            class="table-item-details"
+            v-if="showDetails.active && showDetails.index === index"
+            >{{ product.category }}</span
+          >
           <span v-else>{{ product.category }}</span>
         </div>
 
         <div class="table-item" @mouseleave="openDetails" @click="openDetails(index)" name="name">
-          <span :class="showDetails.theme" class="table-item-details" v-if="showDetails.active && showDetails.index === index">{{
-            product.name
-          }}</span>
+          <span
+            :class="showDetails.theme"
+            class="table-item-details"
+            v-if="showDetails.active && showDetails.index === index"
+            >{{ product.name }}</span
+          >
           <span v-else>{{ product.name }}</span>
         </div>
         <div class="table-item" name="price">{{ product.price }}</div>
@@ -47,11 +64,12 @@
 <script>
   import getRandomIntFrom from '../../utils/get-random-int';
   import detectMobile from '../../utils/detect-mobile';
+  import headersTheme from '../../utils/headers-theme';
   import { ACTIONS, TOOLTIP_TYPES } from '../../store/variables';
 
   export default {
     name: 'products',
-    props: ['products', 'colors', 'isTyping', 'loading', 'showHeader', 'theme'],
+    props: ['products', 'isTyping', 'loading', 'showHeader', 'theme'],
     data() {
       return {
         name: '',
@@ -103,6 +121,9 @@
     computed: {
       titles() {
         return !this.detectMobile() ? this.categories : this.changeCategoryCopy('category', 'cat.');
+      },
+      colors() {
+        return this.theme.light ? headersTheme.light : headersTheme.dark;
       },
     },
   };

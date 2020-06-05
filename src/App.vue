@@ -15,7 +15,6 @@
         :loading="loading"
         :showHeader="showHeader"
         :isTyping="isTyping"
-        :colors="colors"
         :products="products"
       />
       <basket :theme="theme" />
@@ -29,7 +28,6 @@
   import Products from './components/containers/Products';
   import Basket from './components/containers/Basket';
   import findProducts from './utils/find-products';
-  import headersTheme from './utils/headers-theme';
   import { ACTIONS } from './store/variables';
 
   export default {
@@ -95,14 +93,11 @@
           try {
             this.$store.dispatch(ACTIONS.INCREMENT, JSON.parse(totalProducts));
           } catch (error) {
-            throw new Error(`Error adding total amount of products at addTotalProducts(), ${error.message}`);
+            throw new Error(
+              `Error adding total amount of products at addTotalProducts(), ${error.message}`
+            );
           }
         }
-      },
-    },
-    computed: {
-      colors() {
-        return this.theme.light ? headersTheme.light : headersTheme.dark;
       },
     },
     mounted() {

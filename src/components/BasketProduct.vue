@@ -5,9 +5,9 @@
       <span> {{ product.quantity | overOne }}</span>
     </div>
     <div class="product-amount-control">
-      <span class="item" :class="[theme.dark ? 'item-dark' : 'item-light']" @click="decrement">-</span>
+      <span class="item" :class="[theme.dark ? 'dark' : 'light']" @click="decrement">-</span>
       /
-      <span class="item" :class="[theme.dark ? 'item-dark' : 'item-light']" @click="increment">+</span>
+      <span class="item" :class="[theme.dark ? 'dark' : 'light']" @click="increment">+</span>
     </div>
   </div>
 </template>
@@ -71,11 +71,11 @@
         cursor: pointer;
       }
 
-      &-light:hover {
+      &.light:hover {
         filter: drop-shadow(0 0 2px $dark);
       }
 
-      &-dark:hover {
+      &.dark:hover {
         filter: drop-shadow(0 0 2px $light);
       }
     }

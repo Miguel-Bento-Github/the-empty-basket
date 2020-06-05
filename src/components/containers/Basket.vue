@@ -11,8 +11,8 @@
       </header>
       <div class="content">
         <basket-product
-          :theme="theme"
           v-for="product in basket"
+          :theme="theme"
           :product="product"
           :key="product._id"
         />
