@@ -36,12 +36,7 @@
 
     <bag :class="theme" class="bag" />
 
-    <div
-      @mouseenter="showTooltip = true"
-      @mouseleave="showTooltip = false"
-      @click="changeTheme"
-      class="notification"
-    >
+    <div @mouseenter="showTooltip = true" @mouseleave="showTooltip = false" @click="changeTheme" class="notification">
       <odd v-show="showOdd" :class="theme" :show-head="theme.dark" />
     </div>
   </form>
@@ -50,6 +45,7 @@
 <script>
   import Bag from '../icons/Bag';
   import Odd from '../icons/Odd';
+  import { TOOLTIP_TYPES } from '../../store/variables';
 
   export default {
     name: 'filter-items',
@@ -93,7 +89,7 @@
     computed: {
       warnUserAboutBag() {
         const { active, type } = this.$store.state.tooltip;
-        return active && type === 'BAG_INTRO';
+        return active && type === TOOLTIP_TYPES.BAG_INTRO;
       },
     },
   };

@@ -6,9 +6,8 @@ const FILL_BASKET = 'FILL_BASKET';
 const TOGGLE_TOOLTIP = 'TOGGLE_TOOLTIP';
 const INCREMENT = 'INCREMENT';
 const DECREMENT = 'DECREMENT';
-const NETWORK_ERROR = 'Network Error';
 
-export const mutations = {
+export const MUTATIONS = {
   ADD_PRODUCT,
   REMOVE_PRODUCT,
   CHANGE_THEME,
@@ -19,7 +18,7 @@ export const mutations = {
   DECREMENT,
 };
 
-export const actionTypes = {
+export const ACTIONS = {
   ADD_PRODUCT,
   REMOVE_PRODUCT,
   CHANGE_THEME,
@@ -29,14 +28,16 @@ export const actionTypes = {
   INCREMENT,
   DECREMENT,
 };
-
-export const measurementUnits = {
-  grams: 'g',
-  kilograms: 'kg',
-  milliliters: 'ml',
-  liters: 'l',
+export const TOOLTIP_TYPES = {
+  BAG_INTRO: 'BAG_INTRO',
+};
+export const MEASUREMENT_UNITS = {
+  KILOGRAMS: 'kg',
+  GRAMS: 'g',
+  LITERS: 'l',
+  MILLILITERS: 'ml',
 };
 
 export const errorMessages = {
-  NETWORK_ERROR,
+  NETWORK_ERROR: 'Network Error',
 };

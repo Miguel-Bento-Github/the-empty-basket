@@ -30,7 +30,7 @@
   import Basket from './components/containers/Basket';
   import findProducts from './utils/find-products';
   import headersTheme from './utils/headers-theme';
-  import { actionTypes } from './store/variables';
+  import { ACTIONS } from './store/variables';
 
   export default {
     name: 'App',
@@ -57,13 +57,14 @@
     methods: {
       findProducts,
       defineTheme() {
-        this.theme = JSON.parse(localStorage.theme);
+        const theme = localStorage.theme;
+        if (theme) this.theme = JSON.parse(theme);
       },
       changeTheme() {
         this.theme.light = !this.theme.light;
         this.theme.dark = !this.theme.dark;
 
-        this.$store.dispatch(actionTypes.CHANGE_THEME, this.theme);
+        this.$store.dispatch(ACTIONS.CHANGE_THEME, this.theme);
       },
       setHeaderDisplay(show) {
         this.showHeader = show;
@@ -81,12 +82,10 @@
         const basket = localStorage.basket;
         if (basket) {
           try {
-            this.$store.dispatch(actionTypes.FILL_BASKET, JSON.parse(basket));
+            this.$store.dispatch(ACTIONS.FILL_BASKET, JSON.parse(basket));
           } catch (error) {
             localStorage.removeItem('basket');
-            throw new Error(
-              `Error populating basket at populateBasket(), ${error.message}`
-            );
+            throw new Error(`Error populating basket at populateBasket(), ${error.message}`);
           }
         }
       },
@@ -94,14 +93,9 @@
         const totalProducts = localStorage.totalProducts;
         if (totalProducts > 0) {
           try {
-            this.$store.dispatch(
-              actionTypes.INCREMENT,
-              JSON.parse(totalProducts)
-            );
+            this.$store.dispatch(ACTIONS.INCREMENT, JSON.parse(totalProducts));
           } catch (error) {
-            throw new Error(
-              `Error adding total amount of products at addTotalProducts(), ${error.message}`
-            );
+            throw new Error(`Error adding total amount of products at addTotalProducts(), ${error.message}`);
           }
         }
       },

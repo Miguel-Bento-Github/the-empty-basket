@@ -1,4 +1,4 @@
-import { measurementUnits } from './variables';
+import { MEASUREMENT_UNITS } from './variables';
 
 /**
  * Maps through the products in the state and multiplies it's price with quantity.
@@ -50,10 +50,7 @@ function totalWeight(state) {
   state.basket.map(({ unit, quantity }) => {
     const toNumber = (item) => Number(item.replace(/[^0-9.]+/g, ''));
 
-    if (
-      findMeasurementUnit(unit) === measurementUnits.grams ||
-      findMeasurementUnit(unit) === measurementUnits.milliliters
-    ) {
+    if (findMeasurementUnit(unit) === MEASUREMENT_UNITS.GRAMS || findMeasurementUnit(unit) === MEASUREMENT_UNITS.MILLILITERS) {
       if (unit.includes('x')) {
         const [factor, grams] = unit.split('x');
         result += ((factor * toNumber(grams)) / 1000) * quantity;
@@ -61,14 +58,14 @@ function totalWeight(state) {
         result += (toNumber(unit) * quantity) / 1000;
       }
     } else if (
-      findMeasurementUnit(unit) === measurementUnits.kilograms ||
-      findMeasurementUnit(unit) === measurementUnits.liters
+      findMeasurementUnit(unit) === MEASUREMENT_UNITS.KILOGRAMS ||
+      findMeasurementUnit(unit) === MEASUREMENT_UNITS.LITERS
     ) {
       result += toNumber(unit) * quantity;
     }
   });
 
-  return `${Math.round(result * 10) / 10} ${measurementUnits.kilograms}`;
+  return `${Math.round(result * 10) / 10} ${MEASUREMENT_UNITS.KILOGRAMS}`;
 }
 
 export default {

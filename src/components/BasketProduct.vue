@@ -5,25 +5,15 @@
       <span> {{ product.quantity | overOne }}</span>
     </div>
     <div class="product-amount-control">
-      <span
-        class="item"
-        :class="[theme.dark ? 'item-dark' : 'item-light']"
-        @click="decrement"
-        >-</span
-      >
+      <span class="item" :class="[theme.dark ? 'item-dark' : 'item-light']" @click="decrement">-</span>
       /
-      <span
-        class="item"
-        :class="[theme.dark ? 'item-dark' : 'item-light']"
-        @click="increment"
-        >+</span
-      >
+      <span class="item" :class="[theme.dark ? 'item-dark' : 'item-light']" @click="increment">+</span>
     </div>
   </div>
 </template>
 
 <script>
-  import { actionTypes } from '../store/variables';
+  import { ACTIONS } from '../store/variables';
 
   export default {
     name: 'basket-product',
@@ -41,12 +31,12 @@
     },
     methods: {
       decrement() {
-        this.$store.dispatch(actionTypes.REMOVE_PRODUCT, this.product._id);
-        this.$store.dispatch(actionTypes.DECREMENT);
+        this.$store.dispatch(ACTIONS.REMOVE_PRODUCT, this.product._id);
+        this.$store.dispatch(ACTIONS.DECREMENT);
       },
       increment() {
-        this.$store.dispatch(actionTypes.ADD_PRODUCT, this.product);
-        this.$store.dispatch(actionTypes.INCREMENT);
+        this.$store.dispatch(ACTIONS.ADD_PRODUCT, this.product);
+        this.$store.dispatch(ACTIONS.INCREMENT);
       },
     },
     filters: {

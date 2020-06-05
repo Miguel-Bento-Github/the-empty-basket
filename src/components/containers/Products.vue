@@ -8,14 +8,9 @@
           that are a multiple of a random number between 1 and 2.
           Then applies a drop shadow from a random array of colors
           -->
-          <span
-            class="letter"
-            :class="isTyping"
-            :style="titleStyle(i)"
-            v-for="(letter, i) in title"
-            :key="letter.id"
-            >{{ letter }}</span
-          >
+          <span class="letter" :class="isTyping" :style="titleStyle(i)" v-for="(letter, i) in title" :key="letter.id">{{
+            letter
+          }}</span>
         </h1>
       </div>
     </transition>
@@ -28,32 +23,15 @@
         :key="product._id"
         :data-index="index"
       >
-        <div
-          class="table-item"
-          @mouseleave="openDetails"
-          @click="openDetails(index)"
-          name="category"
-        >
-          <span
-            class="table-item-details"
-            v-if="showDetails.active && showDetails.index === index"
-            >{{ product.category }}</span
-          >
+        <div class="table-item" @mouseleave="openDetails" @click="openDetails(index)" name="category">
+          <span class="table-item-details" v-if="showDetails.active && showDetails.index === index">{{ product.category }}</span>
           <span v-else>{{ product.category }}</span>
         </div>
 
-        <div
-          class="table-item"
-          @mouseleave="openDetails"
-          @click="openDetails(index)"
-          name="name"
-        >
-          <span
-            :class="showDetails.theme"
-            class="table-item-details"
-            v-if="showDetails.active && showDetails.index === index"
-            >{{ product.name }}</span
-          >
+        <div class="table-item" @mouseleave="openDetails" @click="openDetails(index)" name="name">
+          <span :class="showDetails.theme" class="table-item-details" v-if="showDetails.active && showDetails.index === index">{{
+            product.name
+          }}</span>
           <span v-else>{{ product.name }}</span>
         </div>
         <div class="table-item" name="price">{{ product.price }}</div>
@@ -69,7 +47,7 @@
 <script>
   import getRandomIntFrom from '../../utils/get-random-int';
   import detectMobile from '../../utils/detect-mobile';
-  import { actionTypes } from '../../store/variables';
+  import { ACTIONS, TOOLTIP_TYPES } from '../../store/variables';
 
   export default {
     name: 'products',
@@ -91,7 +69,7 @@
     methods: {
       detectMobile,
       requestTooltip() {
-        this.$store.dispatch(actionTypes.TOGGLE_TOOLTIP, 'BAG_INTRO');
+        this.$store.dispatch(ACTIONS.TOGGLE_TOOLTIP, TOOLTIP_TYPES.BAG_INTRO);
       },
       addToCart(product) {
         if (!this.$store.state.productsAmount) {
@@ -101,8 +79,8 @@
         if (!product.quantity) {
           this.$set(product, ['quantity'], 1);
         }
-        this.$store.dispatch(actionTypes.ADD_PRODUCT, product);
-        this.$store.dispatch(actionTypes.INCREMENT);
+        this.$store.dispatch(ACTIONS.ADD_PRODUCT, product);
+        this.$store.dispatch(ACTIONS.INCREMENT);
       },
       openDetails(index) {
         this.showDetails.active = true;
@@ -111,9 +89,7 @@
       titleStyle(i) {
         return (
           i % getRandomIntFrom(2) === 0 && {
-            filter: `drop-shadow(0 0 ${getRandomIntFrom(8)}px ${
-              this.colors[i]
-            })`,
+            filter: `drop-shadow(0 0 ${getRandomIntFrom(8)}px ${this.colors[i]})`,
           }
         );
       },
@@ -126,9 +102,7 @@
     },
     computed: {
       titles() {
-        return !this.detectMobile()
-          ? this.categories
-          : this.changeCategoryCopy('category', 'cat.');
+        return !this.detectMobile() ? this.categories : this.changeCategoryCopy('category', 'cat.');
       },
     },
   };
