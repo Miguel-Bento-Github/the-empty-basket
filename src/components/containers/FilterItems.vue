@@ -1,5 +1,5 @@
 <template>
-  <form @mouseover="show" @submit.prevent class="control">
+  <form @mouseover="setOdd" @submit.prevent class="control">
     <bag :class="theme" class="bag" />
     <label class="input">
       <input
@@ -64,7 +64,7 @@
           this.$emit('filter', +this.filter);
         }
       },
-      show({ target }) {
+      setOdd({ target }) {
         target.focus();
         this.showOdd = true;
       },
