@@ -1,6 +1,6 @@
 <template>
   <div class="network-error">
-    There's a connection problem. Please check your internet connection.
+    There's a connection problem. Offline mode is now on.
   </div>
 </template>
 

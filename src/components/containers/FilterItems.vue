@@ -79,7 +79,7 @@
       },
     },
     mounted() {
-      if (localStorage.basket.length) this.showOdd = true;
+      if (localStorage?.basket?.length) this.showOdd = true;
     },
   };
 </script>

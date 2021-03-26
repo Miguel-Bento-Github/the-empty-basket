@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import products from '../data/product.json';
 import { errorMessages } from '../store/variables';
 
 /**
@@ -16,24 +16,25 @@ export default async function findProducts(payload) {
   this.filter = payload;
   this.loading = true;
   this.network = true;
-  const url = `${process.env.VUE_APP_API}api/items`;
+  const data = products.map(products => products);
+  console.log(data);
 
   try {
     if (payload) {
       let res;
       if (typeof payload === 'number') {
         if (Number.isInteger(payload)) {
-          res = await Axios.post(url, { amount: payload });
+          res = data.slice(0, payload);
         } else {
-          res = await Axios.post(url, { price: payload });
+          res = data.filter(({ price }) => +price < payload);
         }
       } else {
-        res = await Axios.post(url, { query: payload });
+        res = data.filter(({ product_name }) => product_name.toLowerCase().includes(payload));
       }
-      this.products = await res.data;
+
+      this.products = res;
     } else {
-      const { data } = await Axios.post(url);
-      this.products = data;
+      this.products = data.slice(50);
     }
   } catch ({ message }) {
     if (errorMessages.NETWORK_ERROR === message) this.network = false;

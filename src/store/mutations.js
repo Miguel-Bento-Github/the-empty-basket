@@ -12,7 +12,7 @@ export default {
   },
   /**
    * Increment the total amount of products.
-   * Update this amount in the state and localStorage
+   * Update this amount in the state and localStorage.
    *
    * @param {number} payload
    */
@@ -26,7 +26,7 @@ export default {
   },
   /**
    * Decrement the total amount of products.
-   * Update this amount in the state and localStorage
+   * Update this amount in the state and localStorage.
    *
    * @param {number} payload
    */ [MUTATIONS.DECREMENT](state, payload) {
