@@ -1,4 +1,4 @@
-import { MUTATIONS, ACTIONS } from './variables';
+import { ACTIONS, MUTATIONS } from './variables';
 
 export default {
   [ACTIONS.CHANGE_THEME](context, payload) {

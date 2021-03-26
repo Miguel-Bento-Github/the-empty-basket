@@ -37,9 +37,9 @@
           <span
             class="table-item-details"
             v-if="showDetails.active && showDetails.index === index"
-            >{{ product.product_category }}</span
+            >{{ product.category }}</span
           >
-          <span v-else>{{ product.product_category }}</span>
+          <span v-else>{{ product.category }}</span>
         </div>
 
         <div class="table-item" @mouseleave="openDetails" @click="openDetails(index)" name="name">
@@ -47,9 +47,9 @@
             :class="showDetails.theme"
             class="table-item-details"
             v-if="showDetails.active && showDetails.index === index"
-            >{{ product.product_name }}</span
+            >{{ product.name }}</span
           >
-          <span v-else>{{ product.product_name }}</span>
+          <span v-else>{{ product.name }}</span>
         </div>
         <div class="table-item" name="price">{{ product.price }}</div>
         <div class="table-item table-item-last" name="unit">
@@ -90,6 +90,7 @@
         this.$store.dispatch(ACTIONS.TOGGLE_TOOLTIP, TOOLTIP_TYPES.BAG_INTRO);
       },
       addToCart(product) {
+        console.log(product);
         if (!this.$store.state.productsAmount) {
           this.requestTooltip();
         }

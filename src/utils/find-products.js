@@ -16,8 +16,7 @@ export default async function findProducts(payload) {
   this.filter = payload;
   this.loading = true;
   this.network = true;
-  const data = products.map(products => products);
-  console.log(data);
+  const data = products.map(product => product);
 
   try {
     if (payload) {
@@ -29,7 +28,7 @@ export default async function findProducts(payload) {
           res = data.filter(({ price }) => +price < payload);
         }
       } else {
-        res = data.filter(({ product_name }) => product_name.toLowerCase().includes(payload));
+        res = data.filter(({ name }) => name.toLowerCase().includes(payload));
       }
 
       this.products = res;
